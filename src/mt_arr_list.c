@@ -13,7 +13,7 @@
 /*!
  * \brief Computes the next highest power of two
  *
- * This nice litte algorithm is taken from
+ * This nice little algorithm is taken from
  * http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
  */
 static uint32_t round_next_power_two(uint32_t v) {
@@ -81,6 +81,7 @@ void mt_al_add(mt_al_t *mt_al, uint8_t data[D_HASH_LENGTH]) {
   mt_al->elems += 1;
 }
 
+//----------------------------------------------------------------------
 void mt_al_truncate(mt_al_t *mt_al, uint32_t elems) {
   if (!mt_al) {
     // TODO error handling
@@ -110,6 +111,7 @@ void mt_al_truncate(mt_al_t *mt_al, uint32_t elems) {
   mt_al->store = tmp;
 }
 
+//----------------------------------------------------------------------
 void mt_al_print(mt_al_t *mt_al) {
   if (!mt_al) {
     // TODO Error handling
