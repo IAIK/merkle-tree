@@ -21,7 +21,8 @@ coverage: LDFLAGS +=-ggdb -coverage
 coverage: CFLAGS +=-ggdb -fprofile-arcs -ftest-coverage
 coverage: dep $(BIN)
 
-silent: CFLAGS +=-ggdb -pg
+#silent: CFLAGS +=-ggdb -pg
+silent: CFLAGS +=-ggdb
 silent: clean dep $(BIN)
 
 release: CFLAGS +=-O3 -fgnu89-inline -D NDEBUG
