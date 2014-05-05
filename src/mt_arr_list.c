@@ -51,7 +51,7 @@ void mt_al_delete(mt_al_t *mt_al) {
 }
 
 //----------------------------------------------------------------------
-void mt_al_add(mt_al_t *mt_al, uint8_t data[D_HASH_LENGTH]) {
+void mt_al_add(mt_al_t *mt_al, const uint8_t data[D_HASH_LENGTH]) {
   if (!mt_al) {
     // TODO Error handling
     return;

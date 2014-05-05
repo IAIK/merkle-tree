@@ -33,7 +33,7 @@ typedef struct merkle_tree_array_list {
  *
  * @return a pointer to the freshly created Merkle Tree array list instance.
  */
-mt_al_t *mt_al_create();
+mt_al_t *mt_al_create(void);
 
 /*!
  * \brief Deletes an existing Merkle Tree array list instance.
@@ -48,7 +48,7 @@ void mt_al_delete(mt_al_t *mt_al);
  * @param mt_al[in] the Merkle Tree data type instance
  * @param data[in] the hash to add to the array list
  */
-void mt_al_add(mt_al_t *mt_al, uint8_t data[D_HASH_LENGTH]);
+void mt_al_add(mt_al_t *mt_al, const uint8_t data[D_HASH_LENGTH]);
 
 /*!
  * \brief Truncates the list of hash values to the given number of elements
