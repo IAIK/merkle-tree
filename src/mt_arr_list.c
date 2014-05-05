@@ -112,6 +112,19 @@ void mt_al_truncate(mt_al_t *mt_al, uint32_t elems) {
 }
 
 //----------------------------------------------------------------------
+uint8_t const * const mt_al_get(mt_al_t *mt_al, uint32_t offset) {
+  if (!mt_al) {
+    // TODO Error code handling
+    return NULL;
+  }
+  if (offset >= mt_al->elems) {
+    // TODO Error code handling (index out of bounds)
+    return NULL;
+  }
+  return mt_al->store[offset * HASH_LENGTH];
+}
+
+//----------------------------------------------------------------------
 void mt_al_print(mt_al_t *mt_al) {
   if (!mt_al) {
     // TODO Error handling

@@ -45,7 +45,7 @@ void mt_al_delete(mt_al_t *mt_al);
 /*!
  * \brief Adds a new hash to the list
  *
- * @param mt_al[in] the Merkle Tree data type instance
+ * @param mt_al[in] the Merkle Tree array list data type instance
  * @param data[in] the hash to add to the array list
  */
 void mt_al_add(mt_al_t *mt_al, const uint8_t data[D_HASH_LENGTH]);
@@ -53,10 +53,18 @@ void mt_al_add(mt_al_t *mt_al, const uint8_t data[D_HASH_LENGTH]);
 /*!
  * \brief Truncates the list of hash values to the given number of elements
  *
- * @param mt_al[in] the Merkle Tree data type instance
+ * @param mt_al[in] the Merkle Tree array list data type instance
  * @param elems the number of elements to truncate the array list to
  */
 void mt_al_truncate(mt_al_t *mt_al, uint32_t elems);
+
+/*!
+ * \brief Return a hash from the hash array list
+ * @param mt_al[in] the Merkle Tree array list data type instance
+ * @param offset[in] the offset of the element to fetch
+ * @return a pointer to the requested hash element in the array list
+ */
+uint8_t const * const mt_al_get(mt_al_t *mt_al, uint32_t offset);
 
 /*!
  * \brief Print the Merkle Tree array list of hashes
