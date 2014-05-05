@@ -1,5 +1,5 @@
 Q = @
-CFLAGS  +=-Wall -Wpedantic -Werror -std=gnu99
+CFLAGS  +=-Wall -Werror -pedantic -std=gnu99
 	
 DEPENDFILE = .depend
 LIB_SRC = mt_arr_list.c
