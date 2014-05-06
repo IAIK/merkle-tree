@@ -121,7 +121,7 @@ uint8_t const * const mt_al_get(mt_al_t *mt_al, uint32_t offset) {
     // TODO Error code handling (index out of bounds)
     return NULL;
   }
-  return mt_al->store[offset * HASH_LENGTH];
+  return &mt_al->store[offset * HASH_LENGTH];
 }
 
 //----------------------------------------------------------------------

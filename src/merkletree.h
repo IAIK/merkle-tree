@@ -45,6 +45,12 @@ void mt_add_block(mt_t * const mt, const uint8_t mac[D_HASH_LENGTH], const uint3
 
 void mt_truncate(mt_t *mt, uint32_t last_valid);
 
+/*!
+ * Print a human readable representation of the Merkle Tree
+ * @param mt a pointer to the Merkle Tree data type instance to print
+ */
+void mt_print(mt_t *mt);
+
 #endif /* MERKLETREE_H_ */
 #ifdef __cplusplus
 }
