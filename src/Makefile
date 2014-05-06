@@ -3,7 +3,7 @@ CFLAGS  +=-Wall -Werror -pedantic -std=gnu99
 	
 DEPENDFILE = .depend
 LIB_SRC = mt_arr_list.c mt_impl.c sha224-256.c
-PRG_SRC = mt-test.c  
+PRG_SRC = mt_test.c
 SRC = $(LIB_SRC) $(PRG_SRC)
 LIB_OBJS = $(LIB_SRC:%.c=%.o)
 PRG_OBJS = $(PRG_SRC:%.c=%.o)
