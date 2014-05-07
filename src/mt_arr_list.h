@@ -63,9 +63,17 @@ void mt_al_update(mt_al_t * const mt_al, const uint8_t data[D_HASH_LENGTH],
 /*!
  * \brief Either updates the last element in the list, or adds a new element
  *
+ * This is a restricted add or update function. It can either add a new
+ * element if offset equals the index of the last element plus one, or update
+ * the last element in the list if offset equals the index of the last
+ * element in the list. This is a useful function for appending data to the
+ * Merkle tree. The checks on the index work as a sanity check.
+ *
  * @param mt_al[in,out] the Merkle Tree array list data type instance
  * @param data[in] the new hash value to either add or update
- * @param offset[in] the index/offset of the hash value to update
+ * @param offset[in] the index/offset of the hash value to update. This value
+ *   must either point to the last element of the list or to the first new
+ *   index.
  */
 void mt_al_add_or_update(mt_al_t * const mt_al,
     const uint8_t data[D_HASH_LENGTH], const uint32_t offset);
