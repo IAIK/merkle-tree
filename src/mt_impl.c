@@ -34,6 +34,17 @@
 //}
 
 //----------------------------------------------------------------------
+static void mt_hash(const uint8_t left[D_HASH_LENGTH],
+    const uint8_t right[D_HASH_LENGTH], uint8_t message_digest[D_HASH_LENGTH]) {
+  // TODO Error Handling
+  SHA256Context ctx;
+  SHA256Reset(&ctx);
+  SHA256Input(&ctx, left, HASH_LENGTH);
+  SHA256Input(&ctx, right, HASH_LENGTH);
+  SHA256Result(&ctx, message_digest);
+}
+
+//----------------------------------------------------------------------
 mt_t *mt_create(void) {
   mt_t *mt = calloc(1, sizeof(mt_t));
   if (!mt) {
@@ -64,7 +75,7 @@ void mt_delete(mt_t *mt) {
 }
 
 //----------------------------------------------------------------------
-void mt_add_block(mt_t * const mt, const uint8_t hash[D_HASH_LENGTH],
+void mt_add(mt_t * const mt, const uint8_t hash[D_HASH_LENGTH],
     const uint32_t offset) {
   if (!mt) {
     // TODO Error handling
@@ -94,22 +105,9 @@ void mt_add_block(mt_t * const mt, const uint8_t hash[D_HASH_LENGTH],
   uint32_t l = 0;         // level
   while (q > 0) {
     if ((q & 1) != 0) {
-      // First add the right neighbor (the new one)
-      if (SHA256Input(&ctx, message_digest, HASH_LENGTH) != shaSuccess) {
-        // TODO Error code handling
-        return;
-      }
-      // Concat left neighbor (the old one)
-      uint8_t const * const left_neighbor = mt_al_get(mt->level[l], q - 1);
-      if (SHA256Input(&ctx, left_neighbor, HASH_LENGTH) != shaSuccess) {
-        // TODO Error code handling
-        return;
-      }
-      if (SHA256Result(&ctx, message_digest) != shaSuccess) {
-        // TODO Error code handling
-        return;
-      }
-      mt_al_add(mt->level[l + 1], message_digest);
+      uint8_t const * const left = mt_al_get(mt->level[l], q - 1);
+      mt_hash(left, message_digest, message_digest);
+      mt_al_add_or_update(mt->level[l + 1], message_digest, (q >> 1));
     } else {
       // TODO
     }
