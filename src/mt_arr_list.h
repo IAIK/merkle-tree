@@ -51,6 +51,26 @@ void mt_al_delete(mt_al_t *mt_al);
 void mt_al_add(mt_al_t *mt_al, const uint8_t data[D_HASH_LENGTH]);
 
 /*!
+ * \brief Update a specific hash value with the given new value
+ *
+ * @param mt_al[in,out] the Merkle Tree array list data type instance
+ * @param data[in] the new hash value
+ * @param offset[in] the index/offset of the hash value to update
+ */
+void mt_al_update(mt_al_t * const mt_al, const uint8_t data[D_HASH_LENGTH],
+    const uint32_t offset);
+
+/*!
+ * \brief Either updates the last element in the list, or adds a new element
+ *
+ * @param mt_al[in,out] the Merkle Tree array list data type instance
+ * @param data[in] the new hash value to either add or update
+ * @param offset[in] the index/offset of the hash value to update
+ */
+void mt_al_add_or_update(mt_al_t * const mt_al,
+    const uint8_t data[D_HASH_LENGTH], const uint32_t offset);
+
+/*!
  * \brief Truncates the list of hash values to the given number of elements
  *
  * @param mt_al[in] the Merkle Tree array list data type instance

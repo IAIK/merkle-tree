@@ -24,7 +24,7 @@ static uint32_t round_next_power_two(uint32_t v) {
   v |= v >> 8;
   v |= v >> 16;
   v++;
-  v+=(v==0); // handle v == 0 edge case
+  v += (v == 0); // handle v == 0 edge case
   return v;
 }
 
@@ -74,11 +74,56 @@ void mt_al_add(mt_al_t *mt_al, const uint8_t data[D_HASH_LENGTH]) {
       // TODO Error Handling
       return;
     }
-    printf("Allocated memory: %x, Old: %p, New: %p\n", alloc/HASH_LENGTH, mt_al->store, tmp);
+    printf("Allocated memory: %x, Old: %p, New: %p\n", alloc / HASH_LENGTH,
+        mt_al->store, tmp);
     mt_al->store = tmp;
   }
   memcpy(&mt_al->store[mt_al->elems * HASH_LENGTH], data, HASH_LENGTH);
   mt_al->elems += 1;
+}
+
+//----------------------------------------------------------------------
+void mt_al_update(mt_al_t * const mt_al, const uint8_t data[D_HASH_LENGTH],
+    const uint32_t offset) {
+  if (!mt_al) {
+    // TODO Error handling
+    return;
+  }
+  if (!data) {
+    // TODO Error handling
+    return;
+  }
+  if (offset >= mt_al->elems) {
+    // TODO Error code handling
+    return;
+  }
+  memcpy(&mt_al->store[offset * HASH_LENGTH], data, HASH_LENGTH);
+}
+
+//----------------------------------------------------------------------
+void mt_al_add_or_update(mt_al_t * const mt_al, const uint8_t data[D_HASH_LENGTH],
+    const uint32_t offset) {
+  if (!mt_al) {
+    // TODO Error handling
+    return;
+  }
+  if (!data) {
+    // TODO Error handling
+    return;
+  }
+  if (mt_al->elems == 0 && offset != 0) {
+    // TODO Error handling
+    return;
+  }
+  if (offset != mt_al->elems && offset != mt_al->elems - 1) {
+    // TODO Error Handling
+    return;
+  }
+  if (offset == mt_al->elems) {
+    mt_al_add(mt_al, data);
+  } else {
+    mt_al_update(mt_al, data, offset);
+  }
 }
 
 //----------------------------------------------------------------------
@@ -107,7 +152,8 @@ void mt_al_truncate(mt_al_t *mt_al, uint32_t elems) {
     // TODO Error Handling
     return;
   }
-  printf("Allocated memory: %x, Old: %p, New: %p\n", alloc/HASH_LENGTH, mt_al->store, tmp);
+  printf("Allocated memory: %x, Old: %p, New: %p\n", alloc / HASH_LENGTH,
+      mt_al->store, tmp);
   mt_al->store = tmp;
 }
 
@@ -131,7 +177,7 @@ void mt_al_print(mt_al_t *mt_al) {
   }
   printf("[%08X\n", mt_al->elems);
   for (uint32_t i = 0; i < mt_al->elems; ++i) {
-    print_hex_buffer(&mt_al->store[i*HASH_LENGTH], HASH_LENGTH);
+    print_hex_buffer(&mt_al->store[i * HASH_LENGTH], HASH_LENGTH);
     printf("\n");
   }
   printf("]\n");
