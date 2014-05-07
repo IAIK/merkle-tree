@@ -41,13 +41,26 @@ mt_t *mt_create(void);
  */
 void mt_delete(mt_t *mt);
 
-void mt_add(mt_t * const mt, const uint8_t mac[D_HASH_LENGTH], const uint32_t offset);
+void mt_add(mt_t * const mt, const uint8_t mac[D_HASH_LENGTH],
+    const uint32_t offset);
 
-void mt_update(mt_t * const mt, const uint8_t mac[D_HASH_LENGTH], const uint32_t offset);
+void mt_update(mt_t * const mt, const uint8_t mac[D_HASH_LENGTH],
+    const uint32_t offset);
 
-void mt_verify(mt_t * const mt, const uint8_t mac[D_HASH_LENGTH], const uint32_t offset);
+void mt_verify(mt_t * const mt, const uint8_t mac[D_HASH_LENGTH],
+    const uint32_t offset);
 
 void mt_truncate(mt_t *mt, uint32_t last_valid);
+
+/*!
+ * \brief Prints a human readable representation of a hash in hexadecimal notation
+ *
+ * @param hash the hash to print
+ */
+static inline void mt_print_hash(const uint8_t hash[D_HASH_LENGTH]) {
+  mt_al_print_hex_buffer(hash, HASH_LENGTH);
+  printf("\n");
+}
 
 /*!
  * Print a human readable representation of the Merkle Tree

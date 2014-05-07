@@ -34,13 +34,6 @@ static int is_power_of_two(uint32_t v) {
 }
 
 //----------------------------------------------------------------------
-static void print_hex_buffer(uint8_t* buffer, uint32_t size) {
-  for (uint32_t i = 0; i < size; ++i) {
-    printf("%02X", buffer[i]);
-  }
-}
-
-//----------------------------------------------------------------------
 mt_al_t *mt_al_create() {
   return calloc(1, sizeof(mt_al_t));
 }
@@ -101,8 +94,8 @@ void mt_al_update(mt_al_t * const mt_al, const uint8_t data[D_HASH_LENGTH],
 }
 
 //----------------------------------------------------------------------
-void mt_al_add_or_update(mt_al_t * const mt_al, const uint8_t data[D_HASH_LENGTH],
-    const uint32_t offset) {
+void mt_al_add_or_update(mt_al_t * const mt_al,
+    const uint8_t data[D_HASH_LENGTH], const uint32_t offset) {
   if (!mt_al) {
     // TODO Error handling
     return;
@@ -158,7 +151,7 @@ void mt_al_truncate(mt_al_t *mt_al, uint32_t elems) {
 }
 
 //----------------------------------------------------------------------
-uint8_t const * const mt_al_get(mt_al_t *mt_al, uint32_t offset) {
+const uint8_t * mt_al_get(mt_al_t *mt_al, uint32_t offset) {
   if (!mt_al) {
     // TODO Error code handling
     return NULL;
@@ -174,10 +167,11 @@ uint8_t const * const mt_al_get(mt_al_t *mt_al, uint32_t offset) {
 void mt_al_print(mt_al_t *mt_al) {
   if (!mt_al) {
     // TODO Error handling
+    return;
   }
   printf("[%08X\n", mt_al->elems);
   for (uint32_t i = 0; i < mt_al->elems; ++i) {
-    print_hex_buffer(&mt_al->store[i * HASH_LENGTH], HASH_LENGTH);
+    mt_al_print_hex_buffer(&mt_al->store[i * HASH_LENGTH], HASH_LENGTH);
     printf("\n");
   }
   printf("]\n");

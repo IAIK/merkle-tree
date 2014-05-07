@@ -8,6 +8,8 @@
 #ifndef MT_ARR_LIST_H_
 #define MT_ARR_LIST_H_
 
+#include <stdio.h>
+
 #include "config.h"
 /*!
  * \brief A resizable array list for hash values
@@ -88,11 +90,57 @@ void mt_al_truncate(mt_al_t *mt_al, uint32_t elems);
 
 /*!
  * \brief Return a hash from the hash array list
+ *
  * @param mt_al[in] the Merkle Tree array list data type instance
  * @param offset[in] the offset of the element to fetch
  * @return a pointer to the requested hash element in the array list
  */
-uint8_t const * const mt_al_get(mt_al_t *mt_al, uint32_t offset);
+const uint8_t * mt_al_get(mt_al_t *mt_al, uint32_t offset);
+
+/*!
+ * \brief Checks if the element at the given offset has a right neighbor
+ *
+ * @param mt_al[in] the Merkle Tree array list data type instance
+ * @param offset[in] the offset of the element for which to look for a
+ * neighbor
+ * @return true if the element at the given offset has a neighbor.
+ */
+static inline uint32_t hasRightNeighbor(const mt_al_t * mt_al,
+    const uint32_t offset) {
+  if (!mt_al) {
+    return 0;
+  }
+  return (offset + 1) < mt_al->elems;
+}
+
+/*!
+ * \brief Returns the number of elements in the list
+ *
+ * @param mt_al[in] the Merkle Tree array list data type instance
+ * @return the number of elements in the list
+ */
+static inline uint32_t getSize(const mt_al_t * mt_al) {
+  if (!mt_al) {
+    return 0;
+  }
+  return mt_al->elems;
+}
+
+/*!
+ * \brief Print a given buffer as hex formated string
+ *
+ * @param buffer[in] the buffer to print
+ * @param size[in] the size of the buffer
+ */
+static inline void mt_al_print_hex_buffer(const uint8_t *buffer,
+    const uint32_t size) {
+  if (!buffer) {
+    return;
+  }
+  for (uint32_t i = 0; i < size; ++i) {
+    printf("%02X", buffer[i]);
+  }
+}
 
 /*!
  * \brief Print the Merkle Tree array list of hashes

@@ -47,8 +47,11 @@ void mt_test_tree() {
   mt_t *mt = mt_create();
   mt_print(mt);
   for (uint32_t i = 0; i < 5; ++i) {
-    mt_add_block(mt, test_values[i],i);
+    mt_add(mt, test_values[i],i);
     mt_print(mt);
+  }
+  for (uint32_t i = 0; i < 5; ++i) {
+    mt_verify(mt, test_values[i], i);
   }
   mt_delete(mt);
 }

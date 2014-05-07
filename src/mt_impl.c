@@ -94,14 +94,9 @@ void mt_add(mt_t * const mt, const uint8_t hash[D_HASH_LENGTH],
   if (mt->elems == 1) {
     return;
   }
-  SHA256Context ctx;
-  if (SHA256Reset(&ctx) != shaSuccess) {
-    // TODO Error code handling
-    return;
-  }
   uint8_t message_digest[D_HASH_LENGTH];
   memcpy(message_digest, hash, HASH_LENGTH);
-  uint32_t q = offset;    // quotient
+  uint32_t q = offset;
   uint32_t l = 0;         // level
   while (q > 0) {
     if ((q & 1) != 0) {
@@ -114,6 +109,76 @@ void mt_add(mt_t * const mt, const uint8_t hash[D_HASH_LENGTH],
     q >>= 1;
     l += 1;
   }
+}
+
+//----------------------------------------------------------------------
+static uint32_t hasNextLevelExceptRoot(mt_t const * const mt, uint32_t cur_lvl) {
+  if (!mt) {
+    return 0;
+  }
+  return (cur_lvl + 1 < TREE_LEVELS - 1)
+      & (getSize(mt->level[(cur_lvl + 1)]) > 0);
+}
+
+//----------------------------------------------------------------------
+static const uint8_t *findRightNeighbor(const mt_t *mt, uint32_t offset,
+    uint32_t l) {
+  if (!mt) {
+    // TODO Error required?
+    return NULL;
+  }
+  do {
+    l -= 1;
+    offset <<= 1;
+    if (offset < getSize(mt->level[l])) {
+      return mt_al_get(mt->level[l], offset);
+    }
+  } while (l > 0);
+  // TODO Error! This should never ever happen!
+  return NULL;
+}
+
+//----------------------------------------------------------------------
+void mt_verify(mt_t * const mt, const uint8_t mac[D_HASH_LENGTH],
+    const uint32_t offset) {
+  if (!mt) {
+    // TODO Error handling
+    return;
+  }
+  if (!mac) {
+    // TODO Error handling
+    return;
+  }
+  if (offset >= mt->elems) {
+    // TODO Error handling
+    return;
+  }
+  uint8_t message_digest[D_HASH_LENGTH];
+  memcpy(message_digest, mac, HASH_LENGTH);
+  uint32_t q = offset;
+  uint32_t l = 0;         // level
+  while (hasNextLevelExceptRoot(mt, l)) {
+    if (!(q & 0x01)) { // left subtree
+      // If I am the left neighbor (even index), we need to check if a right
+      // neighbor exists
+      if (hasRightNeighbor(mt->level[l], q)) {
+        uint8_t const * const right = mt_al_get(mt->level[l], q + 1);
+        mt_hash(message_digest, right, message_digest);
+      } else {
+        if (l > 0) {
+          uint8_t const * const right = findRightNeighbor(mt, q + 1, l);
+          mt_hash(message_digest, right, message_digest);
+        }
+      }
+    } else {           // right subtree
+      // In the right subtree, there must always be a left neighbor!
+      uint8_t const * const left = mt_al_get(mt->level[l], q - 1);
+      mt_hash(left, message_digest, message_digest);
+    }
+    q >>= 1;
+    l += 1;
+  }
+  mt_print_hash(message_digest);
 }
 
 //----------------------------------------------------------------------
