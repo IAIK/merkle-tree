@@ -41,7 +41,11 @@ mt_t *mt_create(void);
  */
 void mt_delete(mt_t *mt);
 
-void mt_add_block(mt_t * const mt, const uint8_t mac[D_HASH_LENGTH], const uint32_t offset);
+void mt_add(mt_t * const mt, const uint8_t mac[D_HASH_LENGTH], const uint32_t offset);
+
+void mt_update(mt_t * const mt, const uint8_t mac[D_HASH_LENGTH], const uint32_t offset);
+
+void mt_verify(mt_t * const mt, const uint8_t mac[D_HASH_LENGTH], const uint32_t offset);
 
 void mt_truncate(mt_t *mt, uint32_t last_valid);
 
