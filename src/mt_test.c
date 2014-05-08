@@ -53,6 +53,8 @@ void mt_test_tree() {
   for (uint32_t i = 0; i < 5; ++i) {
     mt_verify(mt, test_values[i], i);
   }
+  mt_update(mt, test_values[7],0);
+  mt_print(mt);
   mt_delete(mt);
 }
 

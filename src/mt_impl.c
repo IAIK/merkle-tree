@@ -51,7 +51,7 @@ mt_t *mt_create(void) {
     // TODO Error code handling?
     return NULL;
   }
-  for (uint32_t i = 0; i < TREE_LEVELS; ++i) {
+  for (int32_t i = 0; i < TREE_LEVELS; ++i) {
     mt_al_t *tmp = mt_al_create();
     if (!tmp) {
       for (uint32_t j = 0; j < i; ++j) {
@@ -68,7 +68,7 @@ mt_t *mt_create(void) {
 
 //----------------------------------------------------------------------
 void mt_delete(mt_t *mt) {
-  for (uint32_t i = 0; i < TREE_LEVELS; ++i) {
+  for (int32_t i = 0; i < TREE_LEVELS; ++i) {
     free(mt->level[i]);
   }
   free(mt);
@@ -116,36 +116,37 @@ static uint32_t hasNextLevelExceptRoot(mt_t const * const mt, uint32_t cur_lvl) 
   if (!mt) {
     return 0;
   }
+  // TODO fix number of levels, we need ot count root!
   return (cur_lvl + 1 < TREE_LEVELS - 1)
       & (getSize(mt->level[(cur_lvl + 1)]) > 0);
 }
 
 //----------------------------------------------------------------------
 static const uint8_t *findRightNeighbor(const mt_t *mt, uint32_t offset,
-    uint32_t l) {
+    int32_t l) {
   if (!mt) {
     // TODO Error required?
     return NULL;
   }
   do {
-    l -= 1;
-    offset <<= 1;
     if (offset < getSize(mt->level[l])) {
       return mt_al_get(mt->level[l], offset);
     }
-  } while (l > 0);
-  // TODO Error! This should never ever happen!
+    l -= 1;
+    offset <<= 1;
+  } while (l > -1);
+  // This can happen, if there is no neighbor.
   return NULL;
 }
 
 //----------------------------------------------------------------------
-void mt_verify(mt_t * const mt, const uint8_t mac[D_HASH_LENGTH],
+void mt_verify(mt_t * const mt, const uint8_t hash[D_HASH_LENGTH],
     const uint32_t offset) {
   if (!mt) {
     // TODO Error handling
     return;
   }
-  if (!mac) {
+  if (!hash) {
     // TODO Error handling
     return;
   }
@@ -154,21 +155,16 @@ void mt_verify(mt_t * const mt, const uint8_t mac[D_HASH_LENGTH],
     return;
   }
   uint8_t message_digest[D_HASH_LENGTH];
-  memcpy(message_digest, mac, HASH_LENGTH);
+  memcpy(message_digest, hash, HASH_LENGTH);
   uint32_t q = offset;
   uint32_t l = 0;         // level
   while (hasNextLevelExceptRoot(mt, l)) {
     if (!(q & 0x01)) { // left subtree
       // If I am the left neighbor (even index), we need to check if a right
-      // neighbor exists
-      if (hasRightNeighbor(mt->level[l], q)) {
-        uint8_t const * const right = mt_al_get(mt->level[l], q + 1);
+      // neighbor exists.
+      const uint8_t *right;
+      if ((right = findRightNeighbor(mt, q + 1, l)) != NULL) {
         mt_hash(message_digest, right, message_digest);
-      } else {
-        if (l > 0) {
-          uint8_t const * const right = findRightNeighbor(mt, q + 1, l);
-          mt_hash(message_digest, right, message_digest);
-        }
       }
     } else {           // right subtree
       // In the right subtree, there must always be a left neighbor!
@@ -181,13 +177,51 @@ void mt_verify(mt_t * const mt, const uint8_t mac[D_HASH_LENGTH],
   mt_print_hash(message_digest);
 }
 
+void mt_update(mt_t * const mt, const uint8_t hash[D_HASH_LENGTH],
+    const uint32_t offset) {
+  if (!mt) {
+    // TODO Error handling
+    return;
+  }
+  if (!hash) {
+    // TODO Error handling
+    return;
+  }
+  if (offset >= mt->elems) {
+    // TODO Error handling
+    return;
+  }
+  mt_al_update(mt->level[0], hash, offset);
+  uint8_t message_digest[D_HASH_LENGTH];
+  memcpy(message_digest, hash, HASH_LENGTH);
+  uint32_t q = offset;
+  uint32_t l = 0;         // level
+  while (hasNextLevelExceptRoot(mt, l)) {
+    if (!(q & 0x01)) { // left subtree
+      // If I am the left neighbor (even index), we need to check if a right
+      // neighbor exists.
+      const uint8_t *right;
+      if ((right = findRightNeighbor(mt, q + 1, l)) != NULL) {
+        mt_hash(message_digest, right, message_digest);
+      }
+    } else {           // right subtree
+      // In the right subtree, there must always be a left neighbor!
+      uint8_t const * const left = mt_al_get(mt->level[l], q - 1);
+      mt_hash(left, message_digest, message_digest);
+    }
+    q >>= 1;
+    l += 1;
+    mt_al_update(mt->level[l], message_digest, q);
+  }
+}
+
 //----------------------------------------------------------------------
 void mt_print(mt_t *mt) {
   if (!mt) {
     // TODO Error Code Handling
     return;
   }
-  for (uint32_t i = 0; i < TREE_LEVELS; ++i) {
+  for (int32_t i = 0; i < TREE_LEVELS; ++i) {
     if (mt->level[i]->elems == 0) {
       return;
     }
