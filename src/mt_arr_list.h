@@ -156,6 +156,7 @@ static inline uint32_t getSize(const mt_al_t *mt_al) {
 static inline void mt_al_print_hex_buffer(const uint8_t *buffer,
     const uint32_t size) {
   if (!buffer) {
+    printf("[ERROR][mt_al_print_hex_buffer]: Merkle Tree array list is NULL");
     return;
   }
   for (uint32_t i = 0; i < size; ++i) {
@@ -166,7 +167,7 @@ static inline void mt_al_print_hex_buffer(const uint8_t *buffer,
 /*!
  * \brief Print the Merkle Tree array list of hashes
  *
- * @param mt_al[in] the Merkle Tree data type instance
+ * @param mt_al[in] the Merkle Tree array list data type instance
  */
 void mt_al_print(const mt_al_t *mt_al);
 
