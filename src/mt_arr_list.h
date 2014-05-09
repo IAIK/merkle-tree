@@ -53,17 +53,22 @@ void mt_al_delete(mt_al_t *mt_al);
  * @param data[in] the hash to add to the array list
  * @return MT_SUCCESS if adding the element is successful;
  *         MT_ERR_ILLEGAL_PARAM if any of the incoming parameters is null;
- *         MT_ERR_OUT_OF_MEMORY if the array list cannot allocate any more space to grow;
- *         MT_ERR_ILLEGAL_STATE if an integer overflow in the allocation code occurs.
+ *         MT_ERR_OUT_OF_MEMORY if the array list cannot allocate any more
+ *         space to grow;
+ *         MT_ERR_ILLEGAL_STATE if an integer overflow in the allocation code
+ *         occurs.
  */
 mt_error_t mt_al_add(mt_al_t *mt_al, const uint8_t data[HASH_LENGTH]);
 
 /*!
- * \brief Update a specific hash value with the given new value
+ * \brief Update a specific element with the given new hash value
  *
  * @param mt_al[in,out] the Merkle Tree array list data type instance
  * @param data[in] the new hash value
  * @param offset[in] the index/offset of the hash value to update
+ * @return MT_SUCCESS if updating the element is successful;
+ *         MT_ERR_ILLEGAL_PARAM if any of the incoming parameters is null, or
+ *         the offset is out of bounds.
  */
 mt_error_t mt_al_update(const mt_al_t *mt_al, const uint8_t data[HASH_LENGTH],
     const uint32_t offset);
@@ -73,29 +78,39 @@ mt_error_t mt_al_update(const mt_al_t *mt_al, const uint8_t data[HASH_LENGTH],
  *
  * This is a restricted add or update function. It can either add a new
  * element if offset equals the index of the last element plus one, or update
- * the last element in the list if offset equals the index of the last
- * element in the list. This is a useful function for appending data to the
- * Merkle tree. The checks on the index work as a sanity check.
+ * the any existing element in the list if the offset is less than the number
+ * of elements.
  *
  * @param mt_al[in,out] the Merkle Tree array list data type instance
  * @param data[in] the new hash value to either add or update
  * @param offset[in] the index/offset of the hash value to update. This value
- *   must either point to the last element of the list or to the first new
- *   index.
+ *   must be equal to or less than then number of elements in the list.
+ * @return MT_SUCCESS if updating the element is successful;
+ *         MT_ERR_ILLEGAL_PARAM if any of the incoming parameters is null, or
+ *         the offset is out of bounds;
+ *         MT_ERR_OUT_OF_MEMORY if the array list cannot allocate any more
+ *         space to grow;
+ *         MT_ERR_ILLEGAL_STATE if an integer overflow in the allocation code
+ *         occurs.
  */
 mt_error_t mt_al_add_or_update(mt_al_t *mt_al, const uint8_t data[HASH_LENGTH],
     const uint32_t offset);
 
 /*!
- * \brief Truncates the list of hash values to the given number of elements
+ * \brief Truncates the list of hash values to the given number of elements.
  *
  * @param mt_al[in] the Merkle Tree array list data type instance
  * @param elems the number of elements to truncate the array list to
+ * @return MT_SUCCESS if updating the element is successful;
+ *         MT_ERR_ILLEGAL_PARAM if any of the incoming parameters is null, or
+ *         the new number of elements is out of bounds;
+ *         MT_ERR_OUT_OF_MEMORY if reducing the amount of allocated memory
+ *         fails.
  */
 mt_error_t mt_al_truncate(mt_al_t *mt_al, const uint32_t elems);
 
 /*!
- * \brief Return a hash from the hash array list
+ * \brief Return a specific hash element from the array list
  *
  * @param mt_al[in] the Merkle Tree array list data type instance
  * @param offset[in] the offset of the element to fetch
