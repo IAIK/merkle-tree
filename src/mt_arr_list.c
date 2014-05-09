@@ -4,11 +4,11 @@
  *  Created on: 02.05.2014
  *      Author: dhein
  */
+#include "mt_arr_list.h"
+
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-#include "mt_arr_list.h"
 
 /*!
  * \brief Computes the next highest power of two
@@ -40,6 +40,7 @@ mt_al_t *mt_al_create() {
 
 //----------------------------------------------------------------------
 void mt_al_delete(mt_al_t *mt_al) {
+  free(mt_al->store);
   free(mt_al);
 }
 
@@ -86,8 +87,8 @@ mt_error_t mt_al_update(const mt_al_t *mt_al, const uint8_t data[HASH_LENGTH],
 }
 
 //----------------------------------------------------------------------
-mt_error_t mt_al_add_or_update(mt_al_t *mt_al,
-    const uint8_t data[HASH_LENGTH], const uint32_t offset) {
+mt_error_t mt_al_add_or_update(mt_al_t *mt_al, const uint8_t data[HASH_LENGTH],
+    const uint32_t offset) {
   if (!(mt_al && data) || offset > mt_al->elems) {
     return MT_ERR_ILLEGAL_PARAM;
   }
@@ -125,6 +126,18 @@ const uint8_t *mt_al_get(const mt_al_t *mt_al, const uint32_t offset) {
     return NULL;
   }
   return &mt_al->store[offset * HASH_LENGTH];
+}
+
+//----------------------------------------------------------------------
+void mt_al_print_hex_buffer(const uint8_t *buffer,
+    const uint32_t size) {
+  if (!buffer) {
+    printf("[ERROR][mt_al_print_hex_buffer]: Merkle Tree array list is NULL");
+    return;
+  }
+  for (uint32_t i = 0; i < size; ++i) {
+    printf("%02X", buffer[i]);
+  }
 }
 
 //----------------------------------------------------------------------
