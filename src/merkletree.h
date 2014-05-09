@@ -42,16 +42,21 @@ void mt_delete(mt_t *mt);
 
 /*!
  *
- * @param mt
- * @param hash
- * @return MT_SUCCESS if printing is successful; MT_ILLEGAL_PARAM otherwise.
+ * @param mt[in]
+ * @param hash[in]
+ * @return MT_SUCCESS if adding the element is successful;
+ *         MT_ERR_ILLEGAL_PARAM if any of the incoming parameters is null;
+ *         MT_ERR_OUT_OF_MEMORY if the underlying array list cannot allocate
+ *         any more space to grow;
+ *         MT_ERR_ILLEGAL_STATE if an integer overflow in the allocation code
+ *         occurs.
  */
-mt_error_t mt_add(mt_t *mt, const uint8_t hash[HASH_LENGTH]);
+mt_error_t mt_add(mt_t *mt, const mt_hash_t hash);
 
-mt_error_t mt_update(const mt_t *mt, const uint8_t hash[HASH_LENGTH],
+mt_error_t mt_update(const mt_t *mt, const mt_hash_t hash,
     const uint32_t offset);
 
-mt_error_t mt_verify(const mt_t *mt, const uint8_t hash[HASH_LENGTH],
+mt_error_t mt_verify(const mt_t *mt, const mt_hash_t hash,
     const uint32_t offset);
 
 mt_error_t mt_truncate(mt_t *mt, uint32_t last_valid);
@@ -61,7 +66,7 @@ mt_error_t mt_truncate(mt_t *mt, uint32_t last_valid);
  *
  * @param hash the hash to print
  */
-void mt_print_hash(const uint8_t hash[HASH_LENGTH]);
+void mt_print_hash(const mt_hash_t hash);
 
 /*!
  * Print a human readable representation of the Merkle Tree

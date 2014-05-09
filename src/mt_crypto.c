@@ -10,8 +10,8 @@
 #include "mt_crypto.h"
 
 //----------------------------------------------------------------------
-mt_error_t mt_hash(const uint8_t left[HASH_LENGTH],
-    const uint8_t right[HASH_LENGTH], uint8_t message_digest[HASH_LENGTH]) {
+mt_error_t mt_hash(const mt_hash_t left, const mt_hash_t right,
+    mt_hash_t message_digest) {
   if (!(left && right && message_digest)) {
     return MT_ERR_ILLEGAL_PARAM;
   }

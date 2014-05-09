@@ -40,11 +40,10 @@ void mt_delete(mt_t *mt) {
 }
 
 //----------------------------------------------------------------------
-mt_error_t mt_add(mt_t *mt, const uint8_t hash[HASH_LENGTH]) {
+mt_error_t mt_add(mt_t *mt, const mt_hash_t hash) {
   if (!(mt && hash)) {
     return MT_ERR_ILLEGAL_PARAM;
   }
-  // TODO No boundary on loop!
   mt_error_t err = MT_ERR_UNSPECIFIED;
   err = mt_al_add(mt->level[0], hash);
   if (err != MT_SUCCESS) {
@@ -58,7 +57,7 @@ mt_error_t mt_add(mt_t *mt, const uint8_t hash[HASH_LENGTH]) {
   memcpy(message_digest, hash, HASH_LENGTH);
   uint32_t q = mt->elems - 1;
   uint32_t l = 0;         // level
-  while (q > 0) {
+  while (q > 0 && l < TREE_LEVELS) {
     if ((q & 1) != 0) {
       uint8_t const * const left = mt_al_get(mt->level[l], q - 1);
       err = mt_hash(left, message_digest, message_digest);
@@ -103,7 +102,7 @@ static const uint8_t *findRightNeighbor(const mt_t *mt, uint32_t offset,
 }
 
 //----------------------------------------------------------------------
-mt_error_t mt_verify(const mt_t *mt, const uint8_t hash[HASH_LENGTH],
+mt_error_t mt_verify(const mt_t *mt, const mt_hash_t hash,
     const uint32_t offset) {
   if (!(mt && hash && (offset < mt->elems))) {
     return MT_ERR_ILLEGAL_PARAM;
@@ -140,7 +139,7 @@ mt_error_t mt_verify(const mt_t *mt, const uint8_t hash[HASH_LENGTH],
   return MT_SUCCESS;
 }
 
-mt_error_t mt_update(const mt_t *mt, const uint8_t hash[HASH_LENGTH],
+mt_error_t mt_update(const mt_t *mt, const mt_hash_t hash,
     const uint32_t offset) {
   if (!(mt && hash && (offset < mt->elems))) {
     return MT_ERR_ILLEGAL_PARAM;
@@ -184,7 +183,7 @@ mt_error_t mt_update(const mt_t *mt, const uint8_t hash[HASH_LENGTH],
 }
 
 //----------------------------------------------------------------------
-void mt_print_hash(const uint8_t hash[HASH_LENGTH]) {
+void mt_print_hash(const mt_hash_t hash) {
   if (!hash) {
     printf("[ERROR][mt_print_hash]: Hash NULL");
   }

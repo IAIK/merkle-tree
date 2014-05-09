@@ -48,7 +48,7 @@ void mt_al_delete(mt_al_t *mt_al);
  * \brief Adds a new element to the list.
  *
  * @param mt_al[in] the Merkle Tree array list data type instance
- * @param data[in] the hash to add to the array list
+ * @param hash[in] the hash to add to the array list
  * @return MT_SUCCESS if adding the element is successful;
  *         MT_ERR_ILLEGAL_PARAM if any of the incoming parameters is null;
  *         MT_ERR_OUT_OF_MEMORY if the array list cannot allocate any more
@@ -56,19 +56,19 @@ void mt_al_delete(mt_al_t *mt_al);
  *         MT_ERR_ILLEGAL_STATE if an integer overflow in the allocation code
  *         occurs.
  */
-mt_error_t mt_al_add(mt_al_t *mt_al, const uint8_t data[HASH_LENGTH]);
+mt_error_t mt_al_add(mt_al_t *mt_al, const mt_hash_t hash);
 
 /*!
  * \brief Update a specific element with the given new hash value
  *
  * @param mt_al[in,out] the Merkle Tree array list data type instance
- * @param data[in] the new hash value
+ * @param hash[in] the new hash value
  * @param offset[in] the index/offset of the hash value to update
  * @return MT_SUCCESS if updating the element is successful;
  *         MT_ERR_ILLEGAL_PARAM if any of the incoming parameters is null, or
  *         the offset is out of bounds.
  */
-mt_error_t mt_al_update(const mt_al_t *mt_al, const uint8_t data[HASH_LENGTH],
+mt_error_t mt_al_update(const mt_al_t *mt_al, const mt_hash_t hash,
     const uint32_t offset);
 
 /*!
@@ -80,10 +80,10 @@ mt_error_t mt_al_update(const mt_al_t *mt_al, const uint8_t data[HASH_LENGTH],
  * of elements.
  *
  * @param mt_al[in,out] the Merkle Tree array list data type instance
- * @param data[in] the new hash value to either add or update
+ * @param hash[in] the new hash value to either add or update
  * @param offset[in] the index/offset of the hash value to update. This value
  *   must be equal to or less than then number of elements in the list.
- * @return MT_SUCCESS if updating the element is successful;
+ * @return MT_SUCCESS if updating or adding the element is successful;
  *         MT_ERR_ILLEGAL_PARAM if any of the incoming parameters is null, or
  *         the offset is out of bounds;
  *         MT_ERR_OUT_OF_MEMORY if the array list cannot allocate any more
@@ -91,16 +91,16 @@ mt_error_t mt_al_update(const mt_al_t *mt_al, const uint8_t data[HASH_LENGTH],
  *         MT_ERR_ILLEGAL_STATE if an integer overflow in the allocation code
  *         occurs.
  */
-mt_error_t mt_al_add_or_update(mt_al_t *mt_al, const uint8_t data[HASH_LENGTH],
+mt_error_t mt_al_add_or_update(mt_al_t *mt_al, const mt_hash_t hash,
     const uint32_t offset);
 
 /*!
  * \brief Truncates the list of hash values to the given number of elements.
  *
  * @param mt_al[in] the Merkle Tree array list data type instance
- * @param elems the number of elements to truncate the array list to
- * @return MT_SUCCESS if updating the element is successful;
- *         MT_ERR_ILLEGAL_PARAM if any of the incoming parameters is null, or
+ * @param elems[in] the number of elements to truncate the array list to
+ * @return MT_SUCCESS if truncation is successful;
+ *         MT_ERR_ILLEGAL_PARAM if the array list pointer is null, or
  *         the new number of elements is out of bounds;
  *         MT_ERR_OUT_OF_MEMORY if reducing the amount of allocated memory
  *         fails.
@@ -108,7 +108,10 @@ mt_error_t mt_al_add_or_update(mt_al_t *mt_al, const uint8_t data[HASH_LENGTH],
 mt_error_t mt_al_truncate(mt_al_t *mt_al, const uint32_t elems);
 
 /*!
- * \brief Return a specific hash element from the array list
+ * \brief Return a specific hash element from the array list.
+ *
+ * If either the array list pointer is NULL, or the specified offset is out
+ * of bounds, the function will return NULL.
  *
  * @param mt_al[in] the Merkle Tree array list data type instance
  * @param offset[in] the offset of the element to fetch
@@ -117,7 +120,9 @@ mt_error_t mt_al_truncate(mt_al_t *mt_al, const uint32_t elems);
 const uint8_t * mt_al_get(const mt_al_t *mt_al, const uint32_t offset);
 
 /*!
- * \brief Checks if the element at the given offset has a right neighbor
+ * \brief Checks if the element at the given offset has a right neighbor.
+ *
+ * If the given list pointer is NULL this function will return false.
  *
  * @param mt_al[in] the Merkle Tree array list data type instance
  * @param offset[in] the offset of the element for which to look for a
@@ -133,7 +138,9 @@ static inline uint32_t mt_al_has_right_neighbor(const mt_al_t *mt_al,
 }
 
 /*!
- * \brief Returns the number of elements in the list
+ * \brief Returns the number of elements in the list.
+ *
+ * If the given list pointer is NULL this function will return 0.
  *
  * @param mt_al[in] the Merkle Tree array list data type instance
  * @return the number of elements in the list
@@ -146,7 +153,10 @@ static inline uint32_t mt_al_get_size(const mt_al_t *mt_al) {
 }
 
 /*!
- * \brief Print a given buffer as hex formated string
+ * \brief Print a given buffer as hex formated string.
+ *
+ * If the given list pointer is NULL this function will print an error
+ * message.
  *
  * @param buffer[in] the buffer to print
  * @param size[in] the size of the buffer
@@ -154,7 +164,10 @@ static inline uint32_t mt_al_get_size(const mt_al_t *mt_al) {
 void mt_al_print_hex_buffer(const uint8_t *buffer, const uint32_t size);
 
 /*!
- * \brief Print the Merkle Tree array list of hashes
+ * \brief Print the Merkle Tree array list of hashes.
+ *
+ * If the given list pointer is NULL this function will print an error
+ * message.
  *
  * @param mt_al[in] the Merkle Tree array list data type instance
  */

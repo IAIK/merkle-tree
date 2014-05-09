@@ -18,4 +18,11 @@
 #define MAX_FILE_SIZE   UINT32_C(2147483647)  /*!< The maximum size of a file */
 #define MT_AL_MAX_ELEMS (MAX_FILE_SIZE / BLOCK_SIZE) /*!< The maximum number of elements in a Merkle Tree array list. Essential for integer overflow protection! */
 
+/*!
+ * Hash data type.
+ * TODO: Johannes, is it ok to put this into config.h?
+ */
+typedef uint8_t mt_hash_t[HASH_LENGTH];
+
+
 #endif /* CONFIG_H_ */
