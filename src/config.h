@@ -12,13 +12,10 @@
 
 #include <stdint.h>
 
-#define D_HASH_LENGTH 32 /*!< The length of the hash function output in bytes */
-#define D_TREE_LEVELS 19 /*!< The number of levels in the tree minus one, because we don't count the root node */
-
-static const uint32_t BLOCK_SIZE    = 4096; /*!< Block size */
-static const uint32_t MAX_FILE_SIZE = 2147483647;
-static const int32_t  TREE_LEVELS   = D_TREE_LEVELS;
-
-static const uint32_t HASH_LENGTH = D_HASH_LENGTH; /*!< The length of the hash function output in bytes */
+#define HASH_LENGTH                      32u  /*!< The length of the hash function output in bytes */
+#define TREE_LEVELS                      19u  /*!< The number of levels in the tree minus one, because we don't count the root node */
+#define BLOCK_SIZE                     4096u  /*!< Block size */
+#define MAX_FILE_SIZE   UINT32_C(2147483647)
+#define MT_AL_MAX_ELEMS (MAX_FILE_SIZE / BLOCK_SIZE) /*!< The maximum number of elements in a Merkle Tree array list. Essential for integer overflow protection! */
 
 #endif /* CONFIG_H_ */

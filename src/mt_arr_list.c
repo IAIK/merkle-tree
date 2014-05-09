@@ -44,129 +44,93 @@ void mt_al_delete(mt_al_t *mt_al) {
 }
 
 //----------------------------------------------------------------------
-void mt_al_add(mt_al_t *mt_al, const uint8_t data[D_HASH_LENGTH]) {
-  if (!mt_al) {
-    // TODO Error handling
-    return;
-  }
-  if (!data) {
-    // TODO Error handling
-    return;
+mt_error_t mt_al_add(mt_al_t *mt_al, const uint8_t data[HASH_LENGTH]) {
+  if (!(mt_al && data)) {
+    return MT_ERR_ILLEGAL_PARAM;
   }
   if (mt_al->elems == 0) {
     // Add first element
     mt_al->store = malloc(HASH_LENGTH);
     if (!mt_al->store) {
-      // TODO Error handling
+      return MT_ERR_OUT_Of_MEMORY;
     }
   } else if (is_power_of_two(mt_al->elems)) {
     // Need more memory
+    // Prevent integer overflow during size calculation
+    if (((mt_al->elems << 1) < mt_al->elems)
+        || (mt_al->elems << 1 > MT_AL_MAX_ELEMS)) {
+      return MT_ERR_ILLEGAL_STATE;
+    }
     size_t alloc = mt_al->elems * 2 * HASH_LENGTH;
     uint8_t *tmp = realloc(mt_al->store, alloc);
     if (!tmp) {
-      // TODO Error Handling
-      return;
+      return MT_ERR_OUT_Of_MEMORY;
     }
-    printf("Allocated memory: %x, Old: %p, New: %p\n", alloc / HASH_LENGTH,
-        mt_al->store, tmp);
+//    fprintf(stderr, "Allocated memory: %x, Old: %p, New: %p\n", alloc / HASH_LENGTH,
+//        mt_al->store, tmp);
     mt_al->store = tmp;
   }
   memcpy(&mt_al->store[mt_al->elems * HASH_LENGTH], data, HASH_LENGTH);
   mt_al->elems += 1;
+  return MT_SUCCESS;
 }
 
 //----------------------------------------------------------------------
-void mt_al_update(mt_al_t * const mt_al, const uint8_t data[D_HASH_LENGTH],
+mt_error_t mt_al_update(const mt_al_t *mt_al, const uint8_t data[HASH_LENGTH],
     const uint32_t offset) {
-  if (!mt_al) {
-    // TODO Error handling
-    return;
-  }
-  if (!data) {
-    // TODO Error handling
-    return;
-  }
-  if (offset >= mt_al->elems) {
-    // TODO Error code handling
-    return;
+  if (!(mt_al && data && offset < mt_al->elems)) {
+    return MT_ERR_ILLEGAL_PARAM;
   }
   memcpy(&mt_al->store[offset * HASH_LENGTH], data, HASH_LENGTH);
+  return MT_SUCCESS;
 }
 
 //----------------------------------------------------------------------
-void mt_al_add_or_update(mt_al_t * const mt_al,
-    const uint8_t data[D_HASH_LENGTH], const uint32_t offset) {
-  if (!mt_al) {
-    // TODO Error handling
-    return;
-  }
-  if (!data) {
-    // TODO Error handling
-    return;
-  }
-  if (mt_al->elems == 0 && offset != 0) {
-    // TODO Error handling
-    return;
-  }
-  if (offset != mt_al->elems && offset != mt_al->elems - 1) {
-    // TODO Error Handling
-    return;
+mt_error_t mt_al_add_or_update(mt_al_t *mt_al,
+    const uint8_t data[HASH_LENGTH], const uint32_t offset) {
+  if (!(mt_al && data) || offset > mt_al->elems) {
+    return MT_ERR_ILLEGAL_PARAM;
   }
   if (offset == mt_al->elems) {
-    mt_al_add(mt_al, data);
+    return mt_al_add(mt_al, data);
   } else {
-    mt_al_update(mt_al, data, offset);
+    return mt_al_update(mt_al, data, offset);
   }
 }
 
 //----------------------------------------------------------------------
-void mt_al_truncate(mt_al_t *mt_al, uint32_t elems) {
-  if (!mt_al) {
-    // TODO error handling
-    return;
-  }
-  if (elems > mt_al->elems) {
-    // TODO error handling
-    return;
-  }
-  if (elems == mt_al->elems) {
-    // nothing to do
-    return;
+mt_error_t mt_al_truncate(mt_al_t *mt_al, const uint32_t elems) {
+  if (!(mt_al && elems < mt_al->elems)) {
+    return MT_ERR_ILLEGAL_PARAM;
   }
   mt_al->elems = elems;
   if (elems == 0) {
     free(mt_al->store);
-    return;
+    return MT_SUCCESS;
   }
   uint32_t alloc = round_next_power_two(elems) * HASH_LENGTH;
   uint8_t *tmp = realloc(mt_al->store, alloc);
   if (!tmp) {
-    // TODO Do I need to check for a different pointer here?
-    // TODO Error Handling
-    return;
+    return MT_ERR_OUT_Of_MEMORY;
   }
-  printf("Allocated memory: %x, Old: %p, New: %p\n", alloc / HASH_LENGTH,
-      mt_al->store, tmp);
+//  fprintf(stderr, "Allocated memory: %x, Old: %p, New: %p\n",
+//      alloc / HASH_LENGTH, mt_al->store, tmp);
   mt_al->store = tmp;
+  return MT_SUCCESS;
 }
 
 //----------------------------------------------------------------------
-const uint8_t * mt_al_get(mt_al_t *mt_al, uint32_t offset) {
-  if (!mt_al) {
-    // TODO Error code handling
-    return NULL;
-  }
-  if (offset >= mt_al->elems) {
-    // TODO Error code handling (index out of bounds)
+const uint8_t *mt_al_get(const mt_al_t *mt_al, const uint32_t offset) {
+  if (!(mt_al && offset < mt_al->elems)) {
     return NULL;
   }
   return &mt_al->store[offset * HASH_LENGTH];
 }
 
 //----------------------------------------------------------------------
-void mt_al_print(mt_al_t *mt_al) {
+void mt_al_print(const mt_al_t *mt_al) {
   if (!mt_al) {
-    // TODO Error handling
+    printf("[ERROR][mt_al_print]: Merkle Tree array list is NULL");
     return;
   }
   printf("[%08X\n", mt_al->elems);

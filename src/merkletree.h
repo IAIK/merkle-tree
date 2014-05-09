@@ -15,6 +15,7 @@ extern "C" {
 #include <stdlib.h>
 
 #include "config.h"
+#include "mt_err.h"
 #include "mt_arr_list.h"
 
 /*!
@@ -24,7 +25,7 @@ extern "C" {
  */
 typedef struct merkle_tree {
   uint32_t elems;
-  mt_al_t *level[D_TREE_LEVELS];
+  mt_al_t *level[TREE_LEVELS];
 } mt_t;
 
 /*!
@@ -37,27 +38,35 @@ mt_t *mt_create(void);
  *
  * \brief deletes the specified Merkle Tree instance
  *
- * \param[in] mt a pointer to the merkle tree instance to delete
+ * \param[in] mt a pointer to the Merkle Tree instance to delete
  */
 void mt_delete(mt_t *mt);
 
-void mt_add(mt_t * const mt, const uint8_t hash[D_HASH_LENGTH],
+/*!
+ *
+ * @param mt
+ * @param hash
+ * @return MT_SUCCESS if printing is successful; MT_ILLEGAL_PARAM otherwise.
+ */
+mt_error_t mt_add(mt_t *mt, const uint8_t hash[HASH_LENGTH]);
+
+mt_error_t mt_update(const mt_t *mt, const uint8_t hash[HASH_LENGTH],
     const uint32_t offset);
 
-void mt_update(mt_t * const mt, const uint8_t hash[D_HASH_LENGTH],
+mt_error_t mt_verify(const mt_t *mt, const uint8_t hash[HASH_LENGTH],
     const uint32_t offset);
 
-void mt_verify(mt_t * const mt, const uint8_t hash[D_HASH_LENGTH],
-    const uint32_t offset);
-
-void mt_truncate(mt_t *mt, uint32_t last_valid);
+mt_error_t mt_truncate(mt_t *mt, uint32_t last_valid);
 
 /*!
  * \brief Prints a human readable representation of a hash in hexadecimal notation
  *
  * @param hash the hash to print
  */
-static inline void mt_print_hash(const uint8_t hash[D_HASH_LENGTH]) {
+static inline void mt_print_hash(const uint8_t hash[HASH_LENGTH]) {
+  if (!hash) {
+    printf("[ERROR][mt_print_hash]: Hash NULL");
+  }
   mt_al_print_hex_buffer(hash, HASH_LENGTH);
   printf("\n");
 }
@@ -66,7 +75,7 @@ static inline void mt_print_hash(const uint8_t hash[D_HASH_LENGTH]) {
  * Print a human readable representation of the Merkle Tree
  * @param mt a pointer to the Merkle Tree data type instance to print
  */
-void mt_print(mt_t *mt);
+void mt_print(const mt_t *mt);
 
 #endif /* MERKLETREE_H_ */
 #ifdef __cplusplus

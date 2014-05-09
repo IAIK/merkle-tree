@@ -11,11 +11,13 @@
 #include <stdio.h>
 
 #include "config.h"
+#include "mt_err.h"
+
 /*!
  * \brief A resizable array list for hash values
  *
  * The Merkle Tree array list data structure is a simple, resizable array
- * list. It allows to add new hash values to the end of the list, truncating
+ * list. It allows to add new elements to the end of the list, truncating
  * the list, and read and write access to existing elements. Finally, the
  * list is able to print itself to standard out.
  *
@@ -50,7 +52,7 @@ void mt_al_delete(mt_al_t *mt_al);
  * @param mt_al[in] the Merkle Tree array list data type instance
  * @param data[in] the hash to add to the array list
  */
-void mt_al_add(mt_al_t *mt_al, const uint8_t data[D_HASH_LENGTH]);
+mt_error_t mt_al_add(mt_al_t *mt_al, const uint8_t data[HASH_LENGTH]);
 
 /*!
  * \brief Update a specific hash value with the given new value
@@ -59,7 +61,7 @@ void mt_al_add(mt_al_t *mt_al, const uint8_t data[D_HASH_LENGTH]);
  * @param data[in] the new hash value
  * @param offset[in] the index/offset of the hash value to update
  */
-void mt_al_update(mt_al_t * const mt_al, const uint8_t data[D_HASH_LENGTH],
+mt_error_t mt_al_update(const mt_al_t *mt_al, const uint8_t data[HASH_LENGTH],
     const uint32_t offset);
 
 /*!
@@ -77,8 +79,8 @@ void mt_al_update(mt_al_t * const mt_al, const uint8_t data[D_HASH_LENGTH],
  *   must either point to the last element of the list or to the first new
  *   index.
  */
-void mt_al_add_or_update(mt_al_t * const mt_al,
-    const uint8_t data[D_HASH_LENGTH], const uint32_t offset);
+mt_error_t mt_al_add_or_update(mt_al_t *mt_al, const uint8_t data[HASH_LENGTH],
+    const uint32_t offset);
 
 /*!
  * \brief Truncates the list of hash values to the given number of elements
@@ -86,7 +88,7 @@ void mt_al_add_or_update(mt_al_t * const mt_al,
  * @param mt_al[in] the Merkle Tree array list data type instance
  * @param elems the number of elements to truncate the array list to
  */
-void mt_al_truncate(mt_al_t *mt_al, uint32_t elems);
+mt_error_t mt_al_truncate(mt_al_t *mt_al, const uint32_t elems);
 
 /*!
  * \brief Return a hash from the hash array list
@@ -95,7 +97,7 @@ void mt_al_truncate(mt_al_t *mt_al, uint32_t elems);
  * @param offset[in] the offset of the element to fetch
  * @return a pointer to the requested hash element in the array list
  */
-const uint8_t * mt_al_get(mt_al_t *mt_al, uint32_t offset);
+const uint8_t * mt_al_get(const mt_al_t *mt_al, const uint32_t offset);
 
 /*!
  * \brief Checks if the element at the given offset has a right neighbor
@@ -105,7 +107,7 @@ const uint8_t * mt_al_get(mt_al_t *mt_al, uint32_t offset);
  * neighbor
  * @return true if the element at the given offset has a neighbor.
  */
-static inline uint32_t hasRightNeighbor(const mt_al_t * mt_al,
+static inline uint32_t hasRightNeighbor(const mt_al_t *mt_al,
     const uint32_t offset) {
   if (!mt_al) {
     return 0;
@@ -119,7 +121,7 @@ static inline uint32_t hasRightNeighbor(const mt_al_t * mt_al,
  * @param mt_al[in] the Merkle Tree array list data type instance
  * @return the number of elements in the list
  */
-static inline uint32_t getSize(const mt_al_t * mt_al) {
+static inline uint32_t getSize(const mt_al_t *mt_al) {
   if (!mt_al) {
     return 0;
   }
@@ -147,6 +149,6 @@ static inline void mt_al_print_hex_buffer(const uint8_t *buffer,
  *
  * @param mt_al[in] the Merkle Tree data type instance
  */
-void mt_al_print(mt_al_t *mt_al);
+void mt_al_print(const mt_al_t *mt_al);
 
 #endif /* MT_ARR_LIST_H_ */

@@ -11,7 +11,7 @@
 
 #define D_TEST_VALUES 17
 
-static uint8_t test_values[D_TEST_VALUES][D_HASH_LENGTH];
+static uint8_t test_values[D_TEST_VALUES][HASH_LENGTH];
 
 static void mt_test_init() {
   for (uint32_t i = 0; i < D_TEST_VALUES; ++i) {
@@ -47,7 +47,7 @@ void mt_test_tree() {
   mt_t *mt = mt_create();
   mt_print(mt);
   for (uint32_t i = 0; i < 5; ++i) {
-    mt_add(mt, test_values[i],i);
+    mt_add(mt, test_values[i]);
     mt_print(mt);
   }
   for (uint32_t i = 0; i < 5; ++i) {
