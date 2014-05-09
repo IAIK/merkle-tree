@@ -47,10 +47,14 @@ mt_al_t *mt_al_create(void);
 void mt_al_delete(mt_al_t *mt_al);
 
 /*!
- * \brief Adds a new hash to the list
+ * \brief Adds a new element to the list.
  *
  * @param mt_al[in] the Merkle Tree array list data type instance
  * @param data[in] the hash to add to the array list
+ * @return MT_SUCCESS if adding the element is successful;
+ *         MT_ERR_ILLEGAL_PARAM if any of the incoming parameters is null;
+ *         MT_ERR_OUT_OF_MEMORY if the array list cannot allocate any more space to grow;
+ *         MT_ERR_ILLEGAL_STATE if an integer overflow in the allocation code occurs.
  */
 mt_error_t mt_al_add(mt_al_t *mt_al, const uint8_t data[HASH_LENGTH]);
 
