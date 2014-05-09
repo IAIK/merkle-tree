@@ -17,11 +17,11 @@ mt_t *mt_create(void) {
   if (!mt) {
     return NULL;
   }
-  for (int32_t i = 0; i < TREE_LEVELS; ++i) {
+  for (uint32_t i = 0; i < TREE_LEVELS; ++i) {
     mt_al_t *tmp = mt_al_create();
     if (!tmp) {
       for (uint32_t j = 0; j < i; ++j) {
-        free(mt->level[j]);
+        mt_al_delete(mt->level[j]);
       }
       free(mt);
       return NULL;
@@ -33,8 +33,8 @@ mt_t *mt_create(void) {
 
 //----------------------------------------------------------------------
 void mt_delete(mt_t *mt) {
-  for (int32_t i = 0; i < TREE_LEVELS; ++i) {
-    free(mt->level[i]);
+  for (uint32_t i = 0; i < TREE_LEVELS; ++i) {
+    mt_al_delete(mt->level[i]);
   }
   free(mt);
 }
@@ -44,6 +44,7 @@ mt_error_t mt_add(mt_t *mt, const uint8_t hash[HASH_LENGTH]) {
   if (!(mt && hash)) {
     return MT_ERR_ILLEGAL_PARAM;
   }
+  // TODO No boundary on loop!
   mt_error_t err = MT_ERR_UNSPECIFIED;
   err = mt_al_add(mt->level[0], hash);
   if (err != MT_SUCCESS) {
@@ -80,9 +81,8 @@ static uint32_t hasNextLevelExceptRoot(mt_t const * const mt, uint32_t cur_lvl) 
   if (!mt) {
     return 0;
   }
-  // TODO fix number of levels, we need to count root!
   return (cur_lvl + 1 < TREE_LEVELS - 1)
-      & (getSize(mt->level[(cur_lvl + 1)]) > 0);
+      & (mt_al_get_size(mt->level[(cur_lvl + 1)]) > 0);
 }
 
 //----------------------------------------------------------------------
@@ -92,7 +92,7 @@ static const uint8_t *findRightNeighbor(const mt_t *mt, uint32_t offset,
     return NULL;
   }
   do {
-    if (offset < getSize(mt->level[l])) {
+    if (offset < mt_al_get_size(mt->level[l])) {
       return mt_al_get(mt->level[l], offset);
     }
     l -= 1;
@@ -184,12 +184,21 @@ mt_error_t mt_update(const mt_t *mt, const uint8_t hash[HASH_LENGTH],
 }
 
 //----------------------------------------------------------------------
+void mt_print_hash(const uint8_t hash[HASH_LENGTH]) {
+  if (!hash) {
+    printf("[ERROR][mt_print_hash]: Hash NULL");
+  }
+  mt_al_print_hex_buffer(hash, HASH_LENGTH);
+  printf("\n");
+}
+
+//----------------------------------------------------------------------
 void mt_print(const mt_t *mt) {
   if (!mt) {
     printf("[ERROR][mt_print]: Merkle Tree NULL");
     return;
   }
-  for (int32_t i = 0; i < TREE_LEVELS; ++i) {
+  for (uint32_t i = 0; i < TREE_LEVELS; ++i) {
     if (mt->level[i]->elems == 0) {
       return;
     }

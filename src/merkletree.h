@@ -12,8 +12,6 @@ extern "C" {
 #ifndef MERKLETREE_H_
 #define MERKLETREE_H_
 
-#include <stdlib.h>
-
 #include "config.h"
 #include "mt_err.h"
 #include "mt_arr_list.h"
@@ -63,13 +61,7 @@ mt_error_t mt_truncate(mt_t *mt, uint32_t last_valid);
  *
  * @param hash the hash to print
  */
-static inline void mt_print_hash(const uint8_t hash[HASH_LENGTH]) {
-  if (!hash) {
-    printf("[ERROR][mt_print_hash]: Hash NULL");
-  }
-  mt_al_print_hex_buffer(hash, HASH_LENGTH);
-  printf("\n");
-}
+void mt_print_hash(const uint8_t hash[HASH_LENGTH]);
 
 /*!
  * Print a human readable representation of the Merkle Tree
