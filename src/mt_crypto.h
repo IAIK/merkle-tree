@@ -11,7 +11,17 @@
 #include "config.h"
 #include "mt_err.h"
 
-//----------------------------------------------------------------------
+/*!
+ * \brief Compute the hash of the left input concatenated with the right input.
+ *
+ * This function computes the following: h(left||right),
+ * where h is the hash function, left is the left subtree root hash, and
+ *
+ * @param left the root hash of the left subtree
+ * @param right the
+ * @param message_digest
+ * @return
+ */
 mt_error_t mt_hash(const uint8_t left[HASH_LENGTH],
     const uint8_t right[HASH_LENGTH], uint8_t message_digest[HASH_LENGTH]);
 
