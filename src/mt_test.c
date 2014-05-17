@@ -5,7 +5,7 @@
  *      Author: dhein
  */
 
-#include "config.h"
+#include "mt_config.h"
 #include "merkletree.h"
 #include "mt_arr_list.h"
 

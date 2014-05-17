@@ -12,7 +12,7 @@ extern "C" {
 #ifndef MERKLETREE_H_
 #define MERKLETREE_H_
 
-#include "config.h"
+#include "mt_config.h"
 #include "mt_err.h"
 #include "mt_arr_list.h"
 

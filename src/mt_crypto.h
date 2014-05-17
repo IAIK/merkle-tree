@@ -8,7 +8,7 @@
 #ifndef MT_CRYPTO_H_
 #define MT_CRYPTO_H_
 
-#include "config.h"
+#include "mt_config.h"
 #include "mt_err.h"
 
 /*!
