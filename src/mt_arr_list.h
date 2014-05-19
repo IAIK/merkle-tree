@@ -8,7 +8,7 @@
 #ifndef MT_ARR_LIST_H_
 #define MT_ARR_LIST_H_
 
-#include "config.h"
+#include "mt_config.h"
 #include "mt_err.h"
 
 #include <stdlib.h>
