@@ -11,6 +11,8 @@
 #include "config.h"
 #include "mt_err.h"
 
+#include <stdlib.h>
+
 /*!
  * \brief A resizable array list for hash values
  *
@@ -161,7 +163,7 @@ static inline uint32_t mt_al_get_size(const mt_al_t *mt_al) {
  * @param buffer[in] the buffer to print
  * @param size[in] the size of the buffer
  */
-void mt_al_print_hex_buffer(const uint8_t *buffer, const uint32_t size);
+void mt_al_print_hex_buffer(const uint8_t *buffer, const size_t size);
 
 /*!
  * \brief Print the Merkle Tree array list of hashes.

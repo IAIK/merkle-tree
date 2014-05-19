@@ -140,13 +140,13 @@ const uint8_t *mt_al_get(const mt_al_t *mt_al, const uint32_t offset) {
 }
 
 //----------------------------------------------------------------------
-void mt_al_print_hex_buffer(const uint8_t *buffer, const uint32_t size) {
+void mt_al_print_hex_buffer(const uint8_t *buffer, const size_t size) {
   if (!buffer) {
     fprintf(stderr,
         "[ERROR][mt_al_print_hex_buffer]: Merkle Tree array list is NULL");
     return;
   }
-  for (uint32_t i = 0; i < size; ++i) {
+  for (size_t i = 0; i < size; ++i) {
     printf("%02X", buffer[i]);
   }
 }
