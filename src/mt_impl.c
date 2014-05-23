@@ -12,7 +12,8 @@
 #include "mt_crypto.h"
 
 //----------------------------------------------------------------------
-mt_t *mt_create(void) {
+mt_t *mt_create(void)
+{
   mt_t *mt = calloc(1, sizeof(mt_t));
   if (!mt) {
     return NULL;
@@ -32,7 +33,8 @@ mt_t *mt_create(void) {
 }
 
 //----------------------------------------------------------------------
-void mt_delete(mt_t *mt) {
+void mt_delete(mt_t *mt)
+{
   for (uint32_t i = 0; i < TREE_LEVELS; ++i) {
     mt_al_delete(mt->level[i]);
   }
@@ -40,7 +42,8 @@ void mt_delete(mt_t *mt) {
 }
 
 //----------------------------------------------------------------------
-mt_error_t mt_add(mt_t *mt, const mt_hash_t hash) {
+mt_error_t mt_add(mt_t *mt, const mt_hash_t hash)
+{
   if (!(mt && hash)) {
     return MT_ERR_ILLEGAL_PARAM;
   }
@@ -76,7 +79,8 @@ mt_error_t mt_add(mt_t *mt, const mt_hash_t hash) {
 }
 
 //----------------------------------------------------------------------
-static uint32_t hasNextLevelExceptRoot(mt_t const * const mt, uint32_t cur_lvl) {
+static uint32_t hasNextLevelExceptRoot(mt_t const * const mt, uint32_t cur_lvl)
+{
   if (!mt) {
     return 0;
   }
@@ -86,7 +90,8 @@ static uint32_t hasNextLevelExceptRoot(mt_t const * const mt, uint32_t cur_lvl) 
 
 //----------------------------------------------------------------------
 static const uint8_t *findRightNeighbor(const mt_t *mt, uint32_t offset,
-    int32_t l) {
+    int32_t l)
+{
   if (!mt) {
     return NULL;
   }
@@ -102,14 +107,17 @@ static const uint8_t *findRightNeighbor(const mt_t *mt, uint32_t offset,
 }
 
 //----------------------------------------------------------------------
-mt_error_t mt_verify(const mt_t *mt, const mt_hash_t hash,
-    const uint32_t offset) {
-  if (!(mt && hash && (offset < mt->elems))) {
+mt_error_t mt_verify(const mt_t *mt, const uint8_t *tag, const size_t len,
+    const uint32_t offset)
+{
+  if (!(mt && tag && len <= HASH_LENGTH && (offset < mt->elems))) {
     return MT_ERR_ILLEGAL_PARAM;
   }
   mt_error_t err = MT_ERR_UNSPECIFIED;
   uint8_t message_digest[HASH_LENGTH];
-  memcpy(message_digest, hash, HASH_LENGTH);
+  // TODO do this more efficiently!
+  memset(message_digest, HASH_LENGTH, 0);
+  memcpy(message_digest, tag, len);
   uint32_t q = offset;
   uint32_t l = 0;         // level
   while (hasNextLevelExceptRoot(mt, l)) {
@@ -134,23 +142,30 @@ mt_error_t mt_verify(const mt_t *mt, const mt_hash_t hash,
     q >>= 1;
     l += 1;
   }
-  // TODO @this point we need to compare the root hash
   mt_print_hash(message_digest);
-  return MT_SUCCESS;
+  int r = memcmp(message_digest, mt_al_get(mt->level[l],q), HASH_LENGTH);
+  if (r) {
+    return MT_ERR_ROOT_MISMATCH;
+  } else {
+    return MT_SUCCESS;
+  }
 }
 
-mt_error_t mt_update(const mt_t *mt, const mt_hash_t hash,
-    const uint32_t offset) {
-  if (!(mt && hash && (offset < mt->elems))) {
+mt_error_t mt_update(const mt_t *mt, const uint8_t *tag, const size_t len,
+    const uint32_t offset)
+{
+  if (!(mt && tag && len <= HASH_LENGTH && (offset < mt->elems))) {
     return MT_ERR_ILLEGAL_PARAM;
   }
   mt_error_t err = MT_ERR_UNSPECIFIED;
-  err = mt_al_update(mt->level[0], hash, offset);
+  uint8_t message_digest[HASH_LENGTH];
+  // TODO Do this more efficiently
+  memset(message_digest, 0 , HASH_LENGTH);
+  memcpy(message_digest, tag, len);
+  err = mt_al_update(mt->level[0], message_digest, offset);
   if (err != MT_SUCCESS) {
     return err;
   }
-  uint8_t message_digest[HASH_LENGTH];
-  memcpy(message_digest, hash, HASH_LENGTH);
   uint32_t q = offset;
   uint32_t l = 0;         // level
   while (hasNextLevelExceptRoot(mt, l)) {
@@ -183,7 +198,8 @@ mt_error_t mt_update(const mt_t *mt, const mt_hash_t hash,
 }
 
 //----------------------------------------------------------------------
-void mt_print_hash(const mt_hash_t hash) {
+void mt_print_hash(const mt_hash_t hash)
+{
   if (!hash) {
     printf("[ERROR][mt_print_hash]: Hash NULL");
   }
@@ -192,7 +208,8 @@ void mt_print_hash(const mt_hash_t hash) {
 }
 
 //----------------------------------------------------------------------
-void mt_print(const mt_t *mt) {
+void mt_print(const mt_t *mt)
+{
   if (!mt) {
     printf("[ERROR][mt_print]: Merkle Tree NULL");
     return;
