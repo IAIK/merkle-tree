@@ -53,6 +53,8 @@ void mt_delete(mt_t *mt);
  */
 mt_error_t mt_add(mt_t *mt, const mt_hash_t hash);
 
+int mt_exists(mt_t *mt, const uint32_t offset);
+
 mt_error_t mt_update(const mt_t *mt, const uint8_t *tag, const size_t len,
     const uint32_t offset);
 

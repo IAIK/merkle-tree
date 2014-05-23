@@ -119,7 +119,7 @@ mt_error_t mt_al_truncate(mt_al_t *mt_al, const uint32_t elems);
  * @param offset[in] the offset of the element to fetch
  * @return a pointer to the requested hash element in the array list
  */
-const uint8_t * mt_al_get(const mt_al_t *mt_al, const uint32_t offset);
+const uint8_t *mt_al_get(const mt_al_t *mt_al, const uint32_t offset);
 
 /*!
  * \brief Checks if the element at the given offset has a right neighbor.

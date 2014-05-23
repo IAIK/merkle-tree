@@ -79,6 +79,14 @@ mt_error_t mt_add(mt_t *mt, const mt_hash_t hash)
 }
 
 //----------------------------------------------------------------------
+int mt_exists(mt_t *mt, const uint32_t offset) {
+  if (!mt || offset > MT_AL_MAX_ELEMS) {
+    return MT_ERR_ILLEGAL_PARAM;
+  }
+  return (mt_al_get(mt->level[0], offset) != NULL);
+}
+
+//----------------------------------------------------------------------
 static uint32_t hasNextLevelExceptRoot(mt_t const * const mt, uint32_t cur_lvl)
 {
   if (!mt) {
