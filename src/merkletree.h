@@ -51,7 +51,7 @@ void mt_delete(mt_t *mt);
  *         MT_ERR_ILLEGAL_STATE if an integer overflow in the allocation code
  *         occurs.
  */
-mt_error_t mt_add(mt_t *mt, const mt_hash_t hash);
+mt_error_t mt_add(mt_t *mt, const uint8_t *tag, const size_t len);
 
 int mt_exists(mt_t *mt, const uint32_t offset);
 

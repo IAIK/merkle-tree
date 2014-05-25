@@ -42,13 +42,17 @@ void mt_delete(mt_t *mt)
 }
 
 //----------------------------------------------------------------------
-mt_error_t mt_add(mt_t *mt, const mt_hash_t hash)
+mt_error_t mt_add(mt_t *mt, const uint8_t *tag, const size_t len)
 {
-  if (!(mt && hash)) {
+  if (!(mt && tag && len <= HASH_LENGTH)) {
     return MT_ERR_ILLEGAL_PARAM;
   }
   mt_error_t err = MT_ERR_UNSPECIFIED;
-  err = mt_al_add(mt->level[0], hash);
+  uint8_t message_digest[HASH_LENGTH];
+  // TODO do this more efficiently!
+  memset(message_digest, HASH_LENGTH, 0);
+  memcpy(message_digest, tag, len);
+  err = mt_al_add(mt->level[0], message_digest);
   if (err != MT_SUCCESS) {
     return err;
   }
@@ -56,8 +60,6 @@ mt_error_t mt_add(mt_t *mt, const mt_hash_t hash)
   if (mt->elems == 1) {
     return MT_SUCCESS;
   }
-  uint8_t message_digest[HASH_LENGTH];
-  memcpy(message_digest, hash, HASH_LENGTH);
   uint32_t q = mt->elems - 1;
   uint32_t l = 0;         // level
   while (q > 0 && l < TREE_LEVELS) {
@@ -79,7 +81,8 @@ mt_error_t mt_add(mt_t *mt, const mt_hash_t hash)
 }
 
 //----------------------------------------------------------------------
-int mt_exists(mt_t *mt, const uint32_t offset) {
+int mt_exists(mt_t *mt, const uint32_t offset)
+{
   if (!mt || offset > MT_AL_MAX_ELEMS) {
     return MT_ERR_ILLEGAL_PARAM;
   }
@@ -151,7 +154,7 @@ mt_error_t mt_verify(const mt_t *mt, const uint8_t *tag, const size_t len,
     l += 1;
   }
   mt_print_hash(message_digest);
-  int r = memcmp(message_digest, mt_al_get(mt->level[l],q), HASH_LENGTH);
+  int r = memcmp(message_digest, mt_al_get(mt->level[l], q), HASH_LENGTH);
   if (r) {
     return MT_ERR_ROOT_MISMATCH;
   } else {
@@ -168,7 +171,7 @@ mt_error_t mt_update(const mt_t *mt, const uint8_t *tag, const size_t len,
   mt_error_t err = MT_ERR_UNSPECIFIED;
   uint8_t message_digest[HASH_LENGTH];
   // TODO Do this more efficiently
-  memset(message_digest, 0 , HASH_LENGTH);
+  memset(message_digest, 0, HASH_LENGTH);
   memcpy(message_digest, tag, len);
   err = mt_al_update(mt->level[0], message_digest, offset);
   if (err != MT_SUCCESS) {
