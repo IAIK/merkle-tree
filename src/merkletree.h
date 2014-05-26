@@ -53,6 +53,14 @@ void mt_delete(mt_t *mt);
  */
 mt_error_t mt_add(mt_t *mt, const uint8_t *tag, const size_t len);
 
+/*!
+ * \brief returns the size of the lowest level of the Merkle Tree; in other
+ * terms the number of blocks in the protected storage backend
+ * @param mt[in] the Merkle tree data type instance to get the size of
+ * @return the number of blocks protected by the Merkle tree
+ */
+uint32_t mt_get_size(const mt_t *mt);
+
 int mt_exists(mt_t *mt, const uint32_t offset);
 
 mt_error_t mt_update(const mt_t *mt, const uint8_t *tag, const size_t len,

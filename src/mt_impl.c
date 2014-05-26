@@ -4,12 +4,13 @@
  *  Created on: 02.05.2014
  *      Author: dhein
  */
+#include "merkletree.h"
+#include "mt_crypto.h"
+
+#include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-#include "merkletree.h"
-#include "mt_crypto.h"
 
 //----------------------------------------------------------------------
 mt_t *mt_create(void)
@@ -78,6 +79,12 @@ mt_error_t mt_add(mt_t *mt, const uint8_t *tag, const size_t len)
     l += 1;
   }
   return MT_SUCCESS;
+}
+
+//----------------------------------------------------------------------
+uint32_t mt_get_size(const mt_t *mt) {
+  assert(mt);
+  return mt_al_get_size(mt->level[0]);
 }
 
 //----------------------------------------------------------------------
