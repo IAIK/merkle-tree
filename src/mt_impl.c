@@ -51,7 +51,7 @@ mt_error_t mt_add(mt_t *mt, const uint8_t *tag, const size_t len)
   mt_error_t err = MT_ERR_UNSPECIFIED;
   uint8_t message_digest[HASH_LENGTH];
   // TODO do this more efficiently!
-  memset(message_digest, HASH_LENGTH, 0);
+  memset(message_digest, 0, HASH_LENGTH);
   memcpy(message_digest, tag, len);
   err = mt_al_add(mt->level[0], message_digest);
   if (err != MT_SUCCESS) {
@@ -134,7 +134,7 @@ mt_error_t mt_verify(const mt_t *mt, const uint8_t *tag, const size_t len,
   mt_error_t err = MT_ERR_UNSPECIFIED;
   uint8_t message_digest[HASH_LENGTH];
   // TODO do this more efficiently!
-  memset(message_digest, HASH_LENGTH, 0);
+  memset(message_digest, 0, HASH_LENGTH);
   memcpy(message_digest, tag, len);
   uint32_t q = offset;
   uint32_t l = 0;         // level
