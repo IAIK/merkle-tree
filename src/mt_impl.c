@@ -218,7 +218,7 @@ mt_error_t mt_update(const mt_t *mt, const uint8_t *tag, const size_t len,
 }
 
 //----------------------------------------------------------------------
-mt_error_t mt_get_root(mt_t *mt, mt_hash_t *root)
+mt_error_t mt_get_root(mt_t *mt, mt_hash_t root)
 {
   if (!(mt && root)) {
     return MT_ERR_ILLEGAL_PARAM;

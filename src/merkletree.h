@@ -71,7 +71,7 @@ mt_error_t mt_verify(const mt_t *mt, const uint8_t *tag, const size_t len,
 
 mt_error_t mt_truncate(mt_t *mt, uint32_t last_valid);
 
-mt_error_t mt_get_root(mt_t *mt, mt_hash_t *root);
+mt_error_t mt_get_root(mt_t *mt, mt_hash_t root);
 
 /*!
  * \brief Prints a human readable representation of a hash in hexadecimal notation
