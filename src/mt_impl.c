@@ -82,7 +82,8 @@ mt_error_t mt_add(mt_t *mt, const uint8_t *tag, const size_t len)
 }
 
 //----------------------------------------------------------------------
-uint32_t mt_get_size(const mt_t *mt) {
+uint32_t mt_get_size(const mt_t *mt)
+{
   assert(mt);
   return mt_al_get_size(mt->level[0]);
 }
@@ -169,6 +170,7 @@ mt_error_t mt_verify(const mt_t *mt, const uint8_t *tag, const size_t len,
   }
 }
 
+//----------------------------------------------------------------------
 mt_error_t mt_update(const mt_t *mt, const uint8_t *tag, const size_t len,
     const uint32_t offset)
 {
@@ -212,6 +214,20 @@ mt_error_t mt_update(const mt_t *mt, const uint8_t *tag, const size_t len,
       return err;
     }
   }
+  return MT_SUCCESS;
+}
+
+//----------------------------------------------------------------------
+mt_error_t mt_get_root(mt_t *mt, mt_hash_t *root)
+{
+  if (!(mt && root)) {
+    return MT_ERR_ILLEGAL_PARAM;
+  }
+  uint32_t l = 0;         // level
+  while (hasNextLevelExceptRoot(mt, l)) {
+    l += 1;
+  }
+  memcpy(root, mt_al_get(mt->level[l], 0), sizeof(mt_hash_t));
   return MT_SUCCESS;
 }
 
