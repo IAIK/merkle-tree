@@ -42,6 +42,26 @@ void mt_delete(mt_t *mt)
   free(mt);
 }
 
+/*!
+ * \brief Determines if the given index points to a right node in the tree
+ * @param offset the index of the node
+ * @return true if the given index is a right node; false otherwise
+ */
+static int mt_right(uint32_t offset) {
+  // odd index means we are in the right subtree
+  return offset & 0x01;
+}
+
+/*!
+ * \brief Determines if the given index points to a left node in the tree
+ * @param offset the index of the node
+ * @return true if the given index is a left node; false otherwise
+ */
+static int mt_left(uint32_t offset) {
+  // even index means we are in the left subtree
+  return !(offset & 0x01);
+}
+
 //----------------------------------------------------------------------
 mt_error_t mt_add(mt_t *mt, const uint8_t *tag, const size_t len)
 {
@@ -64,7 +84,7 @@ mt_error_t mt_add(mt_t *mt, const uint8_t *tag, const size_t len)
   uint32_t q = mt->elems - 1;
   uint32_t l = 0;         // level
   while (q > 0 && l < TREE_LEVELS) {
-    if ((q & 1) != 0) {
+    if (mt_right(q)) {
       uint8_t const * const left = mt_al_get(mt->level[l], q - 1);
       err = mt_hash(left, message_digest, message_digest);
       if (err != MT_SUCCESS) {
@@ -185,7 +205,7 @@ mt_error_t mt_update(const mt_t *mt, const uint8_t *tag, const size_t len,
   uint32_t q = offset;
   uint32_t l = 0;         // level
   while (hasNextLevelExceptRoot(mt, l)) {
-    if (!(q & 0x01)) { // left subtree
+    if (mt_left(q)) { // left subtree
       // If I am the left neighbor (even index), we need to check if a right
       // neighbor exists.
       const uint8_t *right;
@@ -199,7 +219,7 @@ mt_error_t mt_update(const mt_t *mt, const uint8_t *tag, const size_t len,
     }
     q >>= 1;
     l += 1;
-    MT_ERR_CHK(mt_al_update(mt->level[l], message_digest, q));
+    MT_ERR_CHK(mt_al_update_if_exists(mt->level[l], message_digest, q));
   }
   return MT_SUCCESS;
 }

@@ -74,6 +74,20 @@ mt_error_t mt_al_update(const mt_al_t *mt_al, const mt_hash_t hash,
     const uint32_t offset);
 
 /*!
+ * \brief Update a specific element with the given new hash value, but only
+ * if the given element already exists in the tree
+ *
+ * @param mt_al[in,out] the Merkle Tree array list data type instance
+ * @param hash[in] the new hash value
+ * @param offset[in] the index/offset of the hash value to update
+ * @return MT_SUCCESS if updating the element is successful, or the element
+ *         does not yet exist;
+ *         MT_ERR_ILLEGAL_PARAM if any of the incoming parameters is null.
+ */
+mt_error_t mt_al_update_if_exists(const mt_al_t *mt_al, const mt_hash_t hash,
+    const uint32_t offset);
+
+/*!
  * \brief Either updates the last element in the list, or adds a new element
  *
  * This is a restricted add or update function. It can either add a new

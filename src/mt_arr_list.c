@@ -17,7 +17,8 @@
  * This nice little algorithm is taken from
  * http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
  */
-static uint32_t round_next_power_two(uint32_t v) {
+static uint32_t round_next_power_two(uint32_t v)
+{
   v--;
   v |= v >> 1;
   v |= v >> 2;
@@ -30,23 +31,27 @@ static uint32_t round_next_power_two(uint32_t v) {
 }
 
 //----------------------------------------------------------------------
-static int is_power_of_two(uint32_t v) {
+static int is_power_of_two(uint32_t v)
+{
   return (v != 0) && ((v & (v - 1)) == 0);
 }
 
 //----------------------------------------------------------------------
-mt_al_t *mt_al_create(void) {
+mt_al_t *mt_al_create(void)
+{
   return calloc(1, sizeof(mt_al_t));
 }
 
 //----------------------------------------------------------------------
-void mt_al_delete(mt_al_t *mt_al) {
+void mt_al_delete(mt_al_t *mt_al)
+{
   free(mt_al->store);
   free(mt_al);
 }
 
 //----------------------------------------------------------------------
-mt_error_t mt_al_add(mt_al_t *mt_al, const mt_hash_t hash) {
+mt_error_t mt_al_add(mt_al_t *mt_al, const mt_hash_t hash)
+{
   // this can only happen due to outside interference.
   assert(mt_al->elems < MT_AL_MAX_ELEMS);
   if (!(mt_al && hash)) {
@@ -81,7 +86,8 @@ mt_error_t mt_al_add(mt_al_t *mt_al, const mt_hash_t hash) {
 
 //----------------------------------------------------------------------
 mt_error_t mt_al_update(const mt_al_t *mt_al, const mt_hash_t hash,
-    const uint32_t offset) {
+    const uint32_t offset)
+{
   // this can only happen due to outside interference.
   assert(mt_al->elems < MT_AL_MAX_ELEMS);
   if (!(mt_al && hash && offset < mt_al->elems)) {
@@ -92,8 +98,24 @@ mt_error_t mt_al_update(const mt_al_t *mt_al, const mt_hash_t hash,
 }
 
 //----------------------------------------------------------------------
+mt_error_t mt_al_update_if_exists(const mt_al_t *mt_al, const mt_hash_t hash,
+    const uint32_t offset)
+{
+  assert(mt_al->elems < MT_AL_MAX_ELEMS);
+  if (!(mt_al && hash)) {
+    return MT_ERR_ILLEGAL_PARAM;
+  }
+  if (offset >= mt_al->elems) {
+    return MT_SUCCESS;
+  }
+  memcpy(&mt_al->store[offset * HASH_LENGTH], hash, HASH_LENGTH);
+  return MT_SUCCESS;
+}
+
+//----------------------------------------------------------------------
 mt_error_t mt_al_add_or_update(mt_al_t *mt_al, const mt_hash_t hash,
-    const uint32_t offset) {
+    const uint32_t offset)
+{
   // this can only happen due to outside interference.
   assert(mt_al->elems < MT_AL_MAX_ELEMS);
   if (!(mt_al && hash) || offset > mt_al->elems) {
@@ -107,7 +129,8 @@ mt_error_t mt_al_add_or_update(mt_al_t *mt_al, const mt_hash_t hash,
 }
 
 //----------------------------------------------------------------------
-mt_error_t mt_al_truncate(mt_al_t *mt_al, const uint32_t elems) {
+mt_error_t mt_al_truncate(mt_al_t *mt_al, const uint32_t elems)
+{
   // this can only happen due to outside interference.
   assert(mt_al->elems < MT_AL_MAX_ELEMS);
   if (!(mt_al && elems < mt_al->elems)) {
@@ -130,7 +153,8 @@ mt_error_t mt_al_truncate(mt_al_t *mt_al, const uint32_t elems) {
 }
 
 //----------------------------------------------------------------------
-const uint8_t *mt_al_get(const mt_al_t *mt_al, const uint32_t offset) {
+const uint8_t *mt_al_get(const mt_al_t *mt_al, const uint32_t offset)
+{
   // this can only happen due to outside interference.
   assert(mt_al->elems < MT_AL_MAX_ELEMS);
   if (!(mt_al && offset < mt_al->elems)) {
@@ -140,7 +164,8 @@ const uint8_t *mt_al_get(const mt_al_t *mt_al, const uint32_t offset) {
 }
 
 //----------------------------------------------------------------------
-void mt_al_print_hex_buffer(const uint8_t *buffer, const size_t size) {
+void mt_al_print_hex_buffer(const uint8_t *buffer, const size_t size)
+{
   if (!buffer) {
     fprintf(stderr,
         "[ERROR][mt_al_print_hex_buffer]: Merkle Tree array list is NULL");
@@ -152,7 +177,8 @@ void mt_al_print_hex_buffer(const uint8_t *buffer, const size_t size) {
 }
 
 //----------------------------------------------------------------------
-void mt_al_print(const mt_al_t *mt_al) {
+void mt_al_print(const mt_al_t *mt_al)
+{
   // this can only happen due to outside interference.
   assert(mt_al->elems < MT_AL_MAX_ELEMS);
   if (!mt_al) {
