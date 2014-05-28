@@ -21,4 +21,11 @@ typedef enum mt_error {
   MT_ERR_UNSPECIFIED   = -5  /*!< A general error occurred */
 } mt_error_t;
 
+/*!
+ * \brief wraps a given expression (e.g. a function call) with a test if the
+ * result is not MT_SUCCESS and if this is the case returns the error code
+ */
+#define MT_ERR_CHK(f) do {mt_error_t r = f;if (r != MT_SUCCESS) {return r;}} while (0)
+
+
 #endif /* MT_ERR_H_ */
