@@ -161,7 +161,7 @@ mt_error_t mt_verify(const mt_t *mt, const uint8_t *tag, const size_t len,
     q >>= 1;
     l += 1;
   }
-  mt_print_hash(message_digest);
+  //mt_print_hash(message_digest);
   int r = memcmp(message_digest, mt_al_get(mt->level[l], q), HASH_LENGTH);
   if (r) {
     return MT_ERR_ROOT_MISMATCH;
