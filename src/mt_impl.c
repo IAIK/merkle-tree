@@ -162,11 +162,8 @@ mt_error_t mt_verify(const mt_t *mt, const uint8_t *tag, const size_t len,
   if (!(mt && tag && len <= HASH_LENGTH && (offset < mt->elems))) {
     return MT_ERR_ILLEGAL_PARAM;
   }
-  mt_error_t err = MT_ERR_UNSPECIFIED;
   uint8_t message_digest[HASH_LENGTH];
-  // TODO do this more efficiently!
-  memset(message_digest, 0, HASH_LENGTH);
-  memcpy(message_digest, tag, len);
+  mt_init_hash(message_digest, tag, len);
   uint32_t q = offset;
   uint32_t l = 0;         // level
   while (hasNextLevelExceptRoot(mt, l)) {
@@ -175,18 +172,12 @@ mt_error_t mt_verify(const mt_t *mt, const uint8_t *tag, const size_t len,
       // neighbor exists.
       const uint8_t *right;
       if ((right = findRightNeighbor(mt, q + 1, l)) != NULL) {
-        err = mt_hash(message_digest, right, message_digest);
-        if (err != MT_SUCCESS) {
-          return err;
-        }
+        MT_ERR_CHK(mt_hash(message_digest, right, message_digest));
       }
     } else {           // right subtree
       // In the right subtree, there must always be a left neighbor!
       uint8_t const * const left = mt_al_get(mt->level[l], q - 1);
-      err = mt_hash(left, message_digest, message_digest);
-      if (err != MT_SUCCESS) {
-        return err;
-      }
+      MT_ERR_CHK(mt_hash(left, message_digest, message_digest));
     }
     q >>= 1;
     l += 1;
@@ -208,9 +199,7 @@ mt_error_t mt_update(const mt_t *mt, const uint8_t *tag, const size_t len,
     return MT_ERR_ILLEGAL_PARAM;
   }
   uint8_t message_digest[HASH_LENGTH];
-  // TODO Do this more efficiently
-  memset(message_digest, 0, HASH_LENGTH);
-  memcpy(message_digest, tag, len);
+  mt_init_hash(message_digest, tag, len);
   MT_ERR_CHK(mt_al_update(mt->level[0], message_digest, offset));
   uint32_t q = offset;
   uint32_t l = 0;         // level
