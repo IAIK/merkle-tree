@@ -177,6 +177,22 @@ void mt_al_print_hex_buffer(const uint8_t *buffer, const size_t size)
 }
 
 //----------------------------------------------------------------------
+char *mt_al_sprint_hex_buffer(const uint8_t *buffer, const size_t size)
+{
+  if (!buffer) {
+    fprintf(stderr,
+        "[ERROR][mt_al_sprint_hex_buffer]: Merkle Tree array list is NULL");
+    return NULL;
+  }
+  size_t to_alloc = size * (sizeof(char) * 2) + 1;
+  char *str = malloc(to_alloc);
+  for (size_t i = 0; i < size; ++i) {
+    snprintf((str + (i*2)), 3, "%02X", buffer[i]);
+  }
+  return str;
+}
+
+//----------------------------------------------------------------------
 void mt_al_print(const mt_al_t *mt_al)
 {
   // this can only happen due to outside interference.

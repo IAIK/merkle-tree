@@ -180,6 +180,21 @@ static inline uint32_t mt_al_get_size(const mt_al_t *mt_al) {
 void mt_al_print_hex_buffer(const uint8_t *buffer, const size_t size);
 
 /*!
+ * \brief Print a given buffer as hex formated string into a newly allocated
+ * string
+ *
+ * This function uses a callee allocates caller frees scheme. This function
+ * will allocate the memory for the returned string, but it is the callers
+ * responsibility to free it. If the given list pointer is NULL this function
+ * will print an error message.
+ *
+ * @param buffer[in] the buffer to print
+ * @param size[in] the size of the buffer
+ * @return a human readable hex string representation of the buffer
+ */
+char *mt_al_sprint_hex_buffer(const uint8_t *buffer, const size_t size);
+
+/*!
  * \brief Print the Merkle Tree array list of hashes.
  *
  * If the given list pointer is NULL this function will print an error
