@@ -47,7 +47,8 @@ void mt_delete(mt_t *mt)
  * @param offset the index of the node
  * @return true if the given index is a right node; false otherwise
  */
-static int mt_right(uint32_t offset) {
+static int mt_right(uint32_t offset)
+{
   // odd index means we are in the right subtree
   return offset & 0x01;
 }
@@ -57,9 +58,28 @@ static int mt_right(uint32_t offset) {
  * @param offset the index of the node
  * @return true if the given index is a left node; false otherwise
  */
-static int mt_left(uint32_t offset) {
+static int mt_left(uint32_t offset)
+{
   // even index means we are in the left subtree
   return !(offset & 0x01);
+}
+
+/*!
+ * \brief Copies len bytes from tag into hash
+ *
+ * If len is less than HASH_LENGTH, then the rest of the hash will be filled
+ * with zeros. This function ensures that len is less than HASH_LENGTH.
+ *
+ * @param hash[out] the hash to initialize
+ * @param tag[in] the tag to copy from
+ * @param len[in] the number of bytes to copy from tag into hash
+ */
+static void mt_init_hash(mt_hash_t hash, const uint8_t *tag, const size_t len)
+{
+  assert(hash && tag && len <= HASH_LENGTH);
+  // TODO do this more efficiently!
+  memset(hash, 0, HASH_LENGTH);
+  memcpy(hash, tag, len);
 }
 
 //----------------------------------------------------------------------
@@ -68,15 +88,9 @@ mt_error_t mt_add(mt_t *mt, const uint8_t *tag, const size_t len)
   if (!(mt && tag && len <= HASH_LENGTH)) {
     return MT_ERR_ILLEGAL_PARAM;
   }
-  mt_error_t err = MT_ERR_UNSPECIFIED;
   uint8_t message_digest[HASH_LENGTH];
-  // TODO do this more efficiently!
-  memset(message_digest, 0, HASH_LENGTH);
-  memcpy(message_digest, tag, len);
-  err = mt_al_add(mt->level[0], message_digest);
-  if (err != MT_SUCCESS) {
-    return err;
-  }
+  mt_init_hash(message_digest, tag, len);
+  MT_ERR_CHK(mt_al_add(mt->level[0], message_digest));
   mt->elems += 1;
   if (mt->elems == 1) {
     return MT_SUCCESS;
@@ -86,14 +100,8 @@ mt_error_t mt_add(mt_t *mt, const uint8_t *tag, const size_t len)
   while (q > 0 && l < TREE_LEVELS) {
     if (mt_right(q)) {
       uint8_t const * const left = mt_al_get(mt->level[l], q - 1);
-      err = mt_hash(left, message_digest, message_digest);
-      if (err != MT_SUCCESS) {
-        return err;
-      }
-      err = mt_al_add_or_update(mt->level[l + 1], message_digest, (q >> 1));
-      if (err != MT_SUCCESS) {
-        return err;
-      }
+      MT_ERR_CHK(mt_hash(left, message_digest, message_digest));
+      MT_ERR_CHK(mt_al_add_or_update(mt->level[l + 1], message_digest, (q >> 1)));
     }
     q >>= 1;
     l += 1;
@@ -104,7 +112,9 @@ mt_error_t mt_add(mt_t *mt, const uint8_t *tag, const size_t len)
 //----------------------------------------------------------------------
 uint32_t mt_get_size(const mt_t *mt)
 {
-  assert(mt);
+  if (!mt) {
+    return MT_ERR_ILLEGAL_PARAM;
+  }
   return mt_al_get_size(mt->level[0]);
 }
 
