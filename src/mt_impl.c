@@ -12,6 +12,12 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef MT_DEBUG
+#define DEBUG(m, ...) do {printf(m, __VA_ARGS__);} while(0);
+#else
+#define DEBUG(m, ...)
+#endif
+
 //----------------------------------------------------------------------
 mt_t *mt_create(void)
 {
@@ -90,6 +96,8 @@ mt_error_t mt_add(mt_t *mt, const uint8_t *tag, const size_t len)
   }
   uint8_t message_digest[HASH_LENGTH];
   mt_init_hash(message_digest, tag, len);
+  DEBUG("[MT_ADD][a][@%d] %s\n", mt->elems,
+      mt_al_sprint_hex_buffer(message_digest, HASH_LENGTH));
   MT_ERR_CHK(mt_al_add(mt->level[0], message_digest));
   mt->elems += 1;
   if (mt->elems == 1) {
@@ -101,11 +109,15 @@ mt_error_t mt_add(mt_t *mt, const uint8_t *tag, const size_t len)
     if (mt_right(q)) {
       uint8_t const * const left = mt_al_get(mt->level[l], q - 1);
       MT_ERR_CHK(mt_hash(left, message_digest, message_digest));
-      MT_ERR_CHK(mt_al_add_or_update(mt->level[l + 1], message_digest, (q >> 1)));
+      MT_ERR_CHK(
+          mt_al_add_or_update(mt->level[l + 1], message_digest, (q >> 1)));
     }
     q >>= 1;
     l += 1;
   }
+  assert(!memcmp(message_digest, mt_al_get(mt->level[l], q), HASH_LENGTH));
+  DEBUG("[MT_ADD][r][@%d] %s\n", l,
+      mt_al_sprint_hex_buffer(message_digest, HASH_LENGTH))
   return MT_SUCCESS;
 }
 
@@ -200,6 +212,8 @@ mt_error_t mt_update(const mt_t *mt, const uint8_t *tag, const size_t len,
   }
   uint8_t message_digest[HASH_LENGTH];
   mt_init_hash(message_digest, tag, len);
+  DEBUG("[MT_UPT][u][@%d] %s\n", offset,
+      mt_al_sprint_hex_buffer(message_digest, HASH_LENGTH))
   MT_ERR_CHK(mt_al_update(mt->level[0], message_digest, offset));
   uint32_t q = offset;
   uint32_t l = 0;         // level
@@ -220,6 +234,9 @@ mt_error_t mt_update(const mt_t *mt, const uint8_t *tag, const size_t len,
     l += 1;
     MT_ERR_CHK(mt_al_update_if_exists(mt->level[l], message_digest, q));
   }
+  assert(!memcmp(message_digest, mt_al_get(mt->level[l], q), HASH_LENGTH));
+  DEBUG("[MT_UPT][r][@%d] %s\n", l,
+      mt_al_sprint_hex_buffer(message_digest, HASH_LENGTH))
   return MT_SUCCESS;
 }
 
