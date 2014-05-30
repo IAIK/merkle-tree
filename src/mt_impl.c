@@ -42,6 +42,7 @@ mt_t *mt_create(void)
 //----------------------------------------------------------------------
 void mt_delete(mt_t *mt)
 {
+  if (!mt) {return;}
   for (uint32_t i = 0; i < TREE_LEVELS; ++i) {
     mt_al_delete(mt->level[i]);
   }
