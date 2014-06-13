@@ -277,8 +277,8 @@ void mt_print(const mt_t *mt)
       return;
     }
     printf(
-        "==================== Merkle Tree level[%02d]: ====================\n",
-        i);
+        "==================== Merkle Tree level[%02u]: ====================\n",
+        (unsigned int)i);
     mt_al_print(mt->level[i]);
   }
 }

@@ -201,7 +201,7 @@ void mt_al_print(const mt_al_t *mt_al)
     fprintf(stderr, "[ERROR][mt_al_print]: Merkle Tree array list is NULL");
     return;
   }
-  printf("[%08X\n", mt_al->elems);
+  printf("[%08X\n", (unsigned int)mt_al->elems);
   for (uint32_t i = 0; i < mt_al->elems; ++i) {
     mt_al_print_hex_buffer(&mt_al->store[i * HASH_LENGTH], HASH_LENGTH);
     printf("\n");
