@@ -1,6 +1,6 @@
 Q = @
 CFLAGS  +=-Wall -Werror -pedantic -std=gnu99 $(EXTRA_CFLAGS)
-	
+
 DEPENDFILE = .depend
 LIB_SRC = mt_arr_list.c mt_impl.c mt_crypto.c sha224-256.c
 PRG_SRC = mt_test.c
@@ -25,9 +25,9 @@ coverage: dep $(BIN)
 silent: CFLAGS +=-ggdb
 silent: clean dep $(BIN)
 
-release: CFLAGS +=-O3 -fgnu89-inline -D NDEBUG
-release: clean dep $(BIN) FORCE
-	
+release: CFLAGS +=-O3 -fgnu89-inline -DNDEBUG -Wno-error=unused-function
+release: clean dep $(BIN)
+
 .PHONY: clean doc
 clean:
 	$(Q)rm -Rf $(BIN) $(OBJS) $(LIB) html latex .depend *.gcov *.gcno *.gcda
@@ -45,5 +45,3 @@ dep: $(SRC)
 	$(Q)$(CC) -MM $(SRC) > $(DEPENDFILE)
 
 -include $(DEPENDFILE)
-
- 
