@@ -76,11 +76,11 @@ public:
   }
 
   mt_error_t add(mt_hash_t h) {
-    return mt_add(mt, h, sizeof(h));
+    return mt_add(mt, h, sizeof(mt_hash_t));
   }
 
   mt_error_t update(mt_hash_t h, uint32_t offset) {
-    return mt_update(mt, h, sizeof(h), offset);
+    return mt_update(mt, h, sizeof(mt_hash_t), offset);
   }
 
   void testSkewedTree() {
@@ -93,4 +93,3 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MerkleTreeTest);
-
