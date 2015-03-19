@@ -1,5 +1,5 @@
 Q = @
-CFLAGS  +=-Wall -Werror -pedantic -std=gnu99
+CFLAGS  +=-Wall -Werror -pedantic -std=gnu99 $(EXTRA_CFLAGS)
 	
 DEPENDFILE = .depend
 LIB_SRC = mt_arr_list.c mt_impl.c mt_crypto.c sha224-256.c
