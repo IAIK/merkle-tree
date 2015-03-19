@@ -7,11 +7,11 @@ all: debug
 
 release:
 	$(Q)$(MAKE) -C src/ release
-	$(Q)$(MAKE) -C tests/ all
+	-$(Q)$(MAKE) -C tests/ all
 
 debug:
 	$(Q)$(MAKE) -C src/ debug
-	$(Q)$(MAKE) -C tests/ all
+	-$(Q)$(MAKE) -C tests/ all
 
 coverage:
 	$(Q)$(MAKE) -C src/ coverage
