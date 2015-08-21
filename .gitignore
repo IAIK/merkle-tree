@@ -1,3 +1,5 @@
 *.gcno
 *.gcda
 *.o
+.cproject
+.project
