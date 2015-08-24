@@ -18,7 +18,6 @@
 
 /*!
  * Hash data type.
- * TODO: Johannes, is it ok to put this into config.h?
  */
 typedef uint8_t mt_hash_t[HASH_LENGTH];
 

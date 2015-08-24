@@ -84,7 +84,6 @@ static int mt_left(uint32_t offset)
 static void mt_init_hash(mt_hash_t hash, const uint8_t *tag, const size_t len)
 {
   assert(hash && tag && len <= HASH_LENGTH);
-  // TODO do this more efficiently!
   memset(hash, 0, HASH_LENGTH);
   memcpy(hash, tag, len);
 }
