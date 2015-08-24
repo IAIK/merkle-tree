@@ -1,8 +1,8 @@
 Q=@
 VGRUN = valgrind --tool=memcheck
 
-LDFLAGS += -lcppunit -ggdb
-CXXFLAGS += -Wall -ggdb
+LDFLAGS += -lcppunit -ggdb $(EXTRA_LDFLAGS)
+CXXFLAGS += -Wall -ggdb $(EXTRA_CXXFLAGS)
 CPPFLAGS += -I ../src/
 
 TST_DEP_FILE = .depend
