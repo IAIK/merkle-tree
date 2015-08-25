@@ -8,7 +8,7 @@ with the Secure Block Device[2]. As such it has the following properties:
 
 * Binary hash tree using SHA-256 as hash algorithm
 * Supports variable size data stores
- - max number of elements and max hash tree level are compile time parameters
+ - max number of elements and max hash tree levels are compile-time parameters
  - hash tree grows automatically when new integrity tags (mt_add() function)
 	 are appended
  - hash tree shrinks, when number of integrity tags is truncated
@@ -34,13 +34,13 @@ the documentation.
 
 === 2.2 Building the library ===
 
-Untar the source, change into the libraries root directory, and 'make' it.
+Untar the source, change into the library's root directory, and 'make' it.
 Supported targets are:
 
 * debug    - build with debug information enabled
 * coverage - build with debugging and coverage support
-* release  - build highly optimized release version
-* doc      - build the documentation (as it is) using doxygen 
+* release  - build optimzed (-O3, no debug) release version
+* doc      - build the documentation (as it is) using Doxygen 
 * test     - run the CppUnit based test suite. Call with 'make VGRUN= test' to
              deactivate Valgrind. 
 * clean    - clean up build artifacts
@@ -64,7 +64,7 @@ existing leaf can be updated using the mt_update() function. Each addition or
 update of a leaf will update the root hash of the hash tree, which can be
 obtained by calling the mg_get_root() function. Finally, to reduce the size of
 the hash tree, the mt_truncate() function can be used to specify a new last
-leaf in the tree. All leafs with a higher index will be invalidated and the
+leaf in the tree. All leaves with a higher index will be invalidated and the
 memory used to store them freed. This is useful for example to support a data
 store that can shrink and grow in size.
 

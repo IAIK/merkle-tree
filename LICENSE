@@ -19,8 +19,8 @@ The Merkle Tree (Hash Tree) uses the following external components: SHA-256.
 
 === 1.1 Files ===
 
-src/sha.h         - from RFC 4634
-src/sha224-256.c  - from RFC 4634
+src/sha.h         - from RFC 4634, Section 8.1
+src/sha224-256.c  - from RFC 4634, Section 8.2.2
 
 === 1.2 License ===
 (From RFC 4634 - 1.1 License)
