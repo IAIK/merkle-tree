@@ -1,0 +1,12 @@
+Copyright (c) IAIK, Graz University of Technology, 2014, 2015.
+All rights reserved.
+
+This implementation of a Merkle Tree (Hash Tree) is released under a dual licensing model:
+
+* For Open Source development, the Merkle Tree implementation is licensed under the terms of the GNU
+  GPL version 2. The full text of the GNU GPL v2 is shipped with the product (see LICENSE.GPL2)
+  or can be found online at https://www.gnu.org/licenses/gpl-2.0.html.
+
+* In all other cases, the "Stiftung SIC Java (tm) Crypto-Software Development Kit Licence Agreement"
+  applies. The full license text can be found online at Stiftung SIC. For pricing and further information
+  please contact jce-sales@iaik.at.
