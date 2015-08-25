@@ -10,3 +10,28 @@ This implementation of a Merkle Tree (Hash Tree) is released under a dual licens
 * In all other cases, the "Stiftung SIC Java (tm) Crypto-Software Development Kit Licence Agreement"
   applies. The full license text can be found online at Stiftung SIC. For pricing and further information
   please contact jce-sales@iaik.at.
+
+=== External components ===
+
+The Merkle Tree (Hash Tree) uses the following external components: SHA-256.
+
+=== 1. SHA-256 ===
+
+=== 1.1 Files ===
+
+src/sha.h         - from RFC 4634
+src/sha224-256.c  - from RFC 4634
+
+=== 1.2 License ===
+(From RFC 4634 - 1.1 License)
+
+Permission is granted for all uses, commercial and non-commercial, of the
+sample code found in Section 8.  Royalty free license to use, copy, modify and
+distribute the software found in Section 8 is granted, provided that this
+document is identified in all material mentioning or referencing this software,
+and provided that redistributed derivative works do not contain misleading
+author or version information.
+
+The authors make no representations concerning either the merchantability of
+this software or the suitability of this software for any particular purpose.
+It is provided "as is" without express or implied warranty of any kind.
