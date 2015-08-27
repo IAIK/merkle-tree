@@ -1,7 +1,9 @@
+=== 1. License ===
+
 Copyright (c) IAIK, Graz University of Technology, 2014, 2015.
 All rights reserved.
 
-This implementation of a Merkle Tree (Hash Tree) is released under a dual licensing model:
+This implementation of a Merkle Tree Library is released under a dual licensing model:
 
 * For Open Source development, the Merkle Tree implementation is licensed under the terms of the GNU
   GPL version 2. The full text of the GNU GPL v2 is shipped with the product (see LICENSE.GPL2)
@@ -11,18 +13,21 @@ This implementation of a Merkle Tree (Hash Tree) is released under a dual licens
   applies. The full license text can be found online at Stiftung SIC. For pricing and further information
   please contact jce-sales@iaik.at.
 
-=== External components ===
+=== 2. 3rd Party Software Sources ===
 
-The Merkle Tree (Hash Tree) uses the following external components: SHA-256.
+The Merkle Tree Library uses the following 3rd party software source files for
+implementing the following component: SHA-256. In the following we detail
+which files belong to this component and the respective license for using
+these source files.
 
-=== 1. SHA-256 ===
+=== 2.1. SHA-256 ===
 
-=== 1.1 Files ===
+=== 2.1.1 Files ===
 
 src/sha.h         - from RFC 4634, Section 8.1
 src/sha224-256.c  - from RFC 4634, Section 8.2.2
 
-=== 1.2 License ===
+=== 2.1.2 License ===
 (From RFC 4634 - 1.1 License)
 
 Permission is granted for all uses, commercial and non-commercial, of the
@@ -35,3 +40,4 @@ author or version information.
 The authors make no representations concerning either the merchantability of
 this software or the suitability of this software for any particular purpose.
 It is provided "as is" without express or implied warranty of any kind.
+

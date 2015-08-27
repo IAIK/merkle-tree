@@ -1,10 +1,10 @@
-=== Merkle Tree (Hash Tree) implementation ===
+=== Merkle Tree Library ===
 
 === 1. Introduction ===
 
-The Merkle Tree (Hash Tree) implementation is, as the name suggests, a library
-implementing a binary hash tree[1]. The library was initially developed for use
-with the Secure Block Device[2]. As such it has the following properties:
+The Merkle Tree Library is, as the name suggests, a library implementing a
+binary Merkle (hash) tree[1]. The library was initially developed for use with
+the Secure Block Device[2]. As such it has the following properties:
 
 * Binary hash tree using SHA-256 as hash algorithm
 * Supports variable size data stores
@@ -14,7 +14,7 @@ with the Secure Block Device[2]. As such it has the following properties:
  - hash tree shrinks, when number of integrity tags is truncated
 	 (mt_truncate() function)
 
-=== 2. Building the Merkle Tree (Hash Tree) implementation ===
+=== 2. Building the Merkle Tree Library ===
 
 The library build system is based on make. We currently do not support a
 configure script, if you want to adapt the library to your needs, adapt the
@@ -32,7 +32,7 @@ be installed.
 Doxygen - The library is (sparsely) documented. Doxygen is required to create
 the documentation.
 
-=== 2.2 Building the library ===
+=== 2.2 Building the Merkle Tree Library ===
 
 Untar the source, change into the library's root directory, and 'make' it.
 Supported targets are:
@@ -52,7 +52,7 @@ directory, for linking to other applications.
 
 This library has so far been tested on ARM (32-bit) and AMD64. 
 
-=== 3. Using the Merkle Tree (Hash Tree) implementation ===
+=== 3. Using the Merkle Tree Library ===
 
 The library's user interface is specified in 'src/merkletree.h'. The
 'tests/MerkleTreeTest.cpp' outlines how to use the library. Also the Secure
@@ -70,9 +70,9 @@ store that can shrink and grow in size.
 
 === 4. Licensing ===
 
-For details on the licensing see LICENSE. The Merkle Tree (Hash Tree)
-implementation uses the 'sha.h' and 'sha224-256.c' files from RFC4634 [3] as
-implementation of the SHA-256 hash.
+For details on the licensing see LICENSE. The Merkle Tree Library uses the
+'sha.h' and 'sha224-256.c' files from RFC4634 [3] as implementation of the
+SHA-256 hash.
 
 === Bibliography ===
 
