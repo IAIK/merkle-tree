@@ -17,6 +17,7 @@ coverage:
 	$(Q)$(MAKE) -C src/ coverage
 
 clean:
+	$(Q)rm -Rf doc/
 	$(Q)$(MAKE) -C tests/ clean
 	$(Q)$(MAKE) -C src/ clean
 
