@@ -1,10 +1,6 @@
-/*
- * config.h
- *
- * To be auto generated later on.
- *
- *  Created on: 02.05.2014
- *      Author: dhein
+/*!
+ * \file
+ * \brief Global configuration and data types for the Merkle Tree Library.
  */
 
 #ifndef MT_CONFIG_H_

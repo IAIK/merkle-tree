@@ -1,8 +1,6 @@
-/*
- * mt-data.c
- *
- *  Created on: 02.05.2014
- *      Author: dhein
+/*!
+ * \file
+ * \brief Implements the Merkle Tree data type.
  */
 #include "merkletree.h"
 #include "mt_crypto.h"

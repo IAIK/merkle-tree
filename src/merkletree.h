@@ -1,8 +1,6 @@
-/*
- * MerkleTree.h
- *
- *  Created on: 02.05.2014
- *      Author: dhein
+/*!
+ * \file
+ * \brief Defines the public interface for the Merkle Tree Library.
  */
 
 #ifdef __cplusplus

@@ -1,8 +1,7 @@
-/*
- * mt_crypto.h
- *
- *  Created on: 02.05.2014
- *      Author: dhein
+/*!
+ * \file
+ * \brief Defines the interface between the Merkle Tree data type and actual
+ * hash implementation used for computing its hashes.
  */
 
 #ifndef MT_CRYPTO_H_

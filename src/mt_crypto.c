@@ -1,8 +1,7 @@
-/*
- * mt_crypto.c
- *
- *  Created on: 09.05.2014
- *      Author: dhein
+/*!
+ * \file
+ * \brief Implements the Merkle Tree hash interface using SHA-256 the hash
+ * function.
  */
 
 #include "sha.h"

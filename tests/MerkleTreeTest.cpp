@@ -1,14 +1,6 @@
-/*
- * MerkleTreeTest.cpp
- *
- *  Created on: May 28, 2014
- *      Author: dhein
- */
-/*
- * AesSivTest.cpp
- *
- *  Created on: May 14, 2014
- *      Author: dhein
+/*!
+ * \file
+ * \brief Unit tests for testing the Merkle Tree implementation.
  */
 #include "merkletree.h"
 

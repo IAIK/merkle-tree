@@ -1,8 +1,8 @@
-/*
- * mt_arr_list.h
- *
- *  Created on: 02.05.2014
- *      Author: dhein
+/*!
+ * \file
+ * \brief Defines the interface of a resizeable array data type. The Merkle
+ * Tree uses one resizeable array per level as data store for its nodes and
+ * leafs.
  */
 
 #ifndef MT_ARR_LIST_H_

@@ -1,8 +1,7 @@
-/*
- * mt-test.c
- *
- *  Created on: 02.05.2014
- *      Author: dhein
+/*!
+ * \file
+ * \brief Implements very simple tests which require manual checking.
+ * Superseded by tests defined in the tests/ folder.
  */
 
 #include "mt_config.h"

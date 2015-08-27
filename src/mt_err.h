@@ -1,8 +1,7 @@
-/*
- * mt_err.h
- *
- *  Created on: 09.05.2014
- *      Author: dhein
+/*!
+ * \file
+ * \brief Defines the error codes used by the Merkle Tree Library functions
+ * and defines macros for facilitating error detection.
  */
 
 #ifndef MT_ERR_H_

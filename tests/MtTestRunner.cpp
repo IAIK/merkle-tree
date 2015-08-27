@@ -1,3 +1,8 @@
+/*!
+ * \file
+ * \brief CppUnit test runner for executing the Merkle Tree Library test
+ * suite.
+ */
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>
 

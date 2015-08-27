@@ -1,8 +1,7 @@
-/*
- * mt_arr_list.c
- *
- *  Created on: 02.05.2014
- *      Author: dhein
+/*!
+ * \file
+ * \brief Implements a resizeable array data type. The Merkle Tree uses one
+ * resizeable array per level as data store for its nodes and leafs.
  */
 #include "mt_arr_list.h"
 
