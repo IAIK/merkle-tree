@@ -2,7 +2,7 @@
  * All rights reserved.
  * Contact: http://opensource.iaik.tugraz.at
  * 
- * This file is part of Merkle Tree Library.
+ * This file is part of the Merkle Tree Library.
  * 
  * Commercial License Usage
  * Licensees holding valid commercial licenses may use this file in
