@@ -3,8 +3,10 @@
 ## 1. Introduction
 
 The Merkle Tree Library is, as the name suggests, a library implementing a
-binary Merkle (hash) tree[1]. The library was initially developed for use with
-the Secure Block Device[2]. As such it has the following properties:
+binary [Merkle (hash) tree] (https://en.wikipedia.org/wiki/Merkle_tree).
+The library was initially developed for use with the [Secure Block Device]
+(http://andix.iaik.tugraz.at/sbd/). As such it has the following
+properties:
 
 * Binary hash tree using SHA-256 as hash algorithm
 * Supports variable size data stores
@@ -53,26 +55,27 @@ This library has so far been tested on ARM (32-bit) and AMD64.
 
 The library's user interface is specified in 'src/merkletree.h'. The
 'tests/MerkleTreeTest.cpp' outlines how to use the library. Also the Secure
-Block Device [2] uses this library to ensure overall data integrity.
-Typically, a new Merkle Tree instance is created by calling mt_create(). The
-instance has to be destroyed by a subsequent call to mt_delete(). In between
-new integrity tags can be appended to the tree as leafs by using mt_add(). An
-existing leaf can be updated using the mt_update() function. Each addition or
-update of a leaf will update the root hash of the hash tree, which can be
-obtained by calling the mg_get_root() function. Finally, to reduce the size of
-the hash tree, the mt_truncate() function can be used to specify a new last
-leaf in the tree. All leaves with a higher index will be invalidated and the
-memory used to store them freed. This is useful for example to support a data
-store that can shrink and grow in size.
+Block Device uses this library to ensure overall data integrity.  Typically, a
+new Merkle Tree instance is created by calling mt_create(). The instance has to
+be destroyed by a subsequent call to mt_delete(). In between new integrity tags
+can be appended to the tree as leafs by using mt_add(). An existing leaf can be
+updated using the mt_update() function. Each addition or update of a leaf will
+update the root hash of the hash tree, which can be obtained by calling the
+mg_get_root() function. Finally, to reduce the size of the hash tree, the
+mt_truncate() function can be used to specify a new last leaf in the tree. All
+leaves with a higher index will be invalidated and the memory used to store
+them freed. This is useful for example to support a data store that can shrink
+and grow in size.
 
 ## 4. Licensing
 
 For details on the licensing see LICENSE. The Merkle Tree Library uses the
-'sha.h' and 'sha224-256.c' files from RFC4634 [3] as implementation of the
+'sha.h' and 'sha224-256.c' files from
+[RFC4634](https://tools.ietf.org/rfc/rfc4634.txt) as implementation of the
 SHA-256 hash.
 
-## Bibliography
+## 5. Bibliography
 
-[1] https://en.wikipedia.org/wiki/Merkle_tree
-[2] http://andix.iaik.tugraz.at/sbd/
-[3] https://tools.ietf.org/rfc/rfc4634.txt
+* https://en.wikipedia.org/wiki/Merkle_tree
+* http://andix.iaik.tugraz.at/sbd/
+* https://tools.ietf.org/rfc/rfc4634.txt
