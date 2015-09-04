@@ -1,6 +1,6 @@
-=== Merkle Tree Library ===
+# Merkle Tree Library
 
-=== 1. Introduction ===
+## 1. Introduction
 
 The Merkle Tree Library is, as the name suggests, a library implementing a
 binary Merkle (hash) tree[1]. The library was initially developed for use with
@@ -8,19 +8,17 @@ the Secure Block Device[2]. As such it has the following properties:
 
 * Binary hash tree using SHA-256 as hash algorithm
 * Supports variable size data stores
- - max number of elements and max hash tree levels are compile-time parameters
- - hash tree grows automatically when new integrity tags (mt_add() function)
-	 are appended
- - hash tree shrinks, when number of integrity tags is truncated
-	 (mt_truncate() function)
+  - max number of elements and max hash tree levels are compile-time parameters
+  - hash tree grows automatically when new integrity tags (mt_add() function) are appended
+  - hash tree shrinks, when number of integrity tags is truncated (mt_truncate() function)
 
-=== 2. Building the Merkle Tree Library ===
+## 2. Building the Merkle Tree Library
 
 The library build system is based on make. We currently do not support a
 configure script, if you want to adapt the library to your needs, adapt the
 'src/mt_config.h' header file by yourself.
 
-=== 2.1 Dependencies ===
+### 2.1 Dependencies
 
 CppUnit - We provide a small set of unit test cases using CppUnit. For
 building and running the tests CppUnit is a dependency.
@@ -32,7 +30,7 @@ be installed.
 Doxygen - The library is (sparsely) documented. Doxygen is required to create
 the documentation.
 
-=== 2.2 Building the Merkle Tree Library ===
+### 2.2 Building the Merkle Tree Library
 
 Untar the source, change into the library's root directory, and 'make' it.
 Supported targets are:
@@ -41,18 +39,17 @@ Supported targets are:
 * coverage - build with debugging and coverage support
 * release  - build optimzed (-O3, no debug) release version
 * doc      - build the documentation (as it is) using Doxygen 
-* test     - run the CppUnit based test suite. Call with 'make VGRUN= test' to
-             deactivate Valgrind. 
+* test     - run the CppUnit based test suite. Call with 'make VGRUN= test' to deactivate Valgrind. 
 * clean    - clean up build artifacts
 
 All successful builds create a static library 'libMerkleTree.a' in the 'src'
 directory, for linking to other applications.
 
-=== 2.2 Comments ===
+### 2.3 Comments
 
 This library has so far been tested on ARM (32-bit) and AMD64. 
 
-=== 3. Using the Merkle Tree Library ===
+## 3. Using the Merkle Tree Library
 
 The library's user interface is specified in 'src/merkletree.h'. The
 'tests/MerkleTreeTest.cpp' outlines how to use the library. Also the Secure
@@ -68,13 +65,13 @@ leaf in the tree. All leaves with a higher index will be invalidated and the
 memory used to store them freed. This is useful for example to support a data
 store that can shrink and grow in size.
 
-=== 4. Licensing ===
+## 4. Licensing
 
 For details on the licensing see LICENSE. The Merkle Tree Library uses the
 'sha.h' and 'sha224-256.c' files from RFC4634 [3] as implementation of the
 SHA-256 hash.
 
-=== Bibliography ===
+## Bibliography
 
 [1] https://en.wikipedia.org/wiki/Merkle_tree
 [2] http://andix.iaik.tugraz.at/sbd/
