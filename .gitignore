@@ -3,3 +3,4 @@
 *.o
 .cproject
 .project
+.settings/
