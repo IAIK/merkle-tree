@@ -5,7 +5,7 @@
 The Merkle Tree Library is a C library implementing a binary [Merkle (hash)
 tree] (https://en.wikipedia.org/wiki/Merkle_tree).  The library was initially
 developed for use with the [Secure Block Device]
-(http://testweb.iaik.tugraz.at/content/research/opensource/secure_block_device/).
+(http://www.iaik.tugraz.at/content/research/opensource/secure_block_device/).
 As such it has the following properties:
 
 * Binary hash tree using SHA-256 as hash algorithm
